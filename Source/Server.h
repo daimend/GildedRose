@@ -16,6 +16,7 @@ static std::map< httpMethod, const char * > method = {
 };
 
 class Service;
+typedef Inn Database;
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -35,7 +36,10 @@ public:
 	 *  @returns false if the path already exists
 	 */
 	bool registerService(httpMethod method_, String route_, Service* obj_); // ,
-//		std::function<void(Request &request, StreamResponse &response)> func);
+//		std::function<void(Request &request, StreamResponse &response)> func
+
+	void serviceCallback(Request &request, StreamResponse &response);
+
 	void setupRoutes();
 
 	// DD: TODO: Temporary (auto-generated) GUI for testing, disable for release
@@ -51,6 +55,6 @@ private:
 	Server server;
 	ListenerList<Service> requestHandlers;
 	std::unique_ptr<WebViewComponent> client;
-	std::unique_ptr<Inn> inn;
+	std::unique_ptr<Database> database;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ServerModule)
 };

@@ -30,14 +30,6 @@ public:
 	{
 
 	}
-/*
-	bool registerService(httpMethod method, String route, Service* proto) // ,
-//		std::function<void(Request &request, StreamResponse &response)> func)
-	{
-
-	}
-	*/
-
 };
 
 

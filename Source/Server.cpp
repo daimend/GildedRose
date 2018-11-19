@@ -3,7 +3,7 @@
 #include "Services/Services.h"
 
 // simple int array to mimic db row
-struct Inn1
+struct DataBaseRow
 {
 	String name = "Gilded Rose";
 	int rooms[4][2] = { {2 ,1}, {2,0}, {1,2}, {1,0} };
@@ -15,9 +15,9 @@ JUCE_IMPLEMENT_SINGLETON(ServerModule)
 ServerModule::ServerModule()
 	: server(8080)
 {
-	Inn1 inn1;
-	inn.reset(new Inn(inn1.name));
-	inn->init(inn1.rooms);
+	DataBaseRow db;
+	database.reset(new Inn(db.name));
+	database->init(db.rooms);
 
 	setupRoutes();
 	server.registerController(this);
@@ -38,19 +38,10 @@ ServerModule::~ServerModule()
 	clearSingletonInstance();
 }
 
-/*
-bool ServerModule::registerService(httpMethod method, String route, 
-	iService* obj, std::function<void(Request &request, StreamResponse &response)> func)
-{
-	addRoute("GET", "/hello", ServerModule, hello);
-}
-*/
-
 void ServerModule::helloWorld(Request &request, StreamResponse &response)
 {
 	response << "Welcome to Gilded Rose! " << htmlEntities(request.get("name", "... what's your name ?")) << "\n";
 }
-
 
 bool ServerModule::registerService(httpMethod method_, String route_, Service* obj_)
 {
@@ -58,7 +49,12 @@ bool ServerModule::registerService(httpMethod method_, String route_, Service* o
 	return false;
 }
 
-// setup URIs / endpoints for api calls
+void ServerModule::serviceCallback(Request &request, StreamResponse &response)
+{
+	requestHandlers.call([&request, &response](Service& l) { l.handleRequest(request, response); });
+}
+
+// setup any default URIs / endpoints
 void ServerModule::setupRoutes()
 {
 	addRoute("GET", "/gildedrose", ServerModule, helloWorld);

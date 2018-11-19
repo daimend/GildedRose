@@ -4,6 +4,8 @@
 
 // =====================================================================
 /** ServiceThread
+*	Each service implementation has optional thread for any background
+*	tasks / processing required for dynamic response / data
 */
 class ServiceThread : public Thread
 {

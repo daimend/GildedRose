@@ -29,13 +29,5 @@ public:
 	{
 
 	}
-/*
-	bool registerService(httpMethod method, String route, Service* obj,
-		std::function<void(Request &request, StreamResponse &response)> func)
-	{
-
-	}
-	*/
-
 };
 
