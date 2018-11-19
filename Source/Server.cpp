@@ -59,6 +59,12 @@ void ServerModule::hello(Request &request, StreamResponse &response)
 }
 */
 
+bool ServerModule::registerService(httpMethod method_, String route_, Service* obj_)
+{
+	requestHandlers.add(obj_);
+	return false;
+}
+
 // add endpoints for rest api calls
 // for now we'll simply setup the callbacks on this object
 // however this would be better handled by a "requestHandler"

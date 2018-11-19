@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Server.h"
-// abstract interface for service / endpoint implementations
 
 // =====================================================================
 /** ServiceThread
@@ -21,7 +20,7 @@ public:
 	{
 		while (!threadShouldExit())
 		{
-			// Ensure the server has started before starting services
+			// Ensure the server has started before injecting services
 			if ((server = ServerModule::getInstanceWithoutCreating()) != nullptr)
 				break;
 			wait(1000);
@@ -29,7 +28,7 @@ public:
 		return init(/*server*/);
 	};
 
-	virtual void init(/*ServerModule* server*/) const = 0;
+	virtual void init(/*ServerModule* server*/) /*const*/ = 0;
 
 	ServerModule* server;
 
@@ -37,9 +36,9 @@ public:
 };
 
 
+// abstract interface for service / endpoint implementations
 // =====================================================================
 /** Service
-
 	Interface for all Service implementations.
 	This interface provide object factory and prototype pattern methods
 	to allow each service to be implemented as independent modules via
@@ -50,15 +49,15 @@ class Service : virtual public ServiceThread
 public:
 	virtual ~Service() {}
 
-	//	virtual void handleRequest(Request &request, StreamResponse &response) = 0;
+	virtual void handleRequest(Request &request, StreamResponse &response) = 0;
 
 		/** Register service with with server */
-	//	virtual bool registerService(httpMethod method, String route, iService* obj, 
+//	virtual bool registerService(httpMethod method, String route, Service* proto) = 0;// ,
 	//		std::function<void(Request &request, StreamResponse &response)> func) = 0;
 
 	// called on each service when server starts for
 	// any initialization tasks
-	virtual void init(/*ServerModule* serv*/) const = 0;
+	virtual void init(/*ServerModule* serv*/) /*const*/ = 0;
 
 	// prototyping methods
 	virtual Service* clone() const = 0;
@@ -67,8 +66,8 @@ public:
 
 	static HashMap<String, Service*> protoTable;
 
-	String name;
-	Service* obj;
+	String name; // service name
+	String uri; // route / endpoint path
 };
 
 #define IMPLEMENT_CLONE(TYPE) \

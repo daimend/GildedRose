@@ -17,6 +17,7 @@ Service* Service::makeService(String type)
 Service* Service::addPrototype(String type, Service* p)
 {
 	DBG("adding prototype for " << type);
+	p->name = type;
 	protoTable.set(type, p);
 	return p;
 }

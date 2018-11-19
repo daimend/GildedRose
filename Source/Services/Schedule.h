@@ -6,16 +6,17 @@ class Schedule : public Service
 {
 public:
 	IMPLEMENT_CLONE(Schedule)
-		Schedule() // : Thread("test")
+	Schedule()
 	{
-		//		startThread();
-		DBG("Schedule CONSTRUCTOR CALLED");
+		DBG(this->name << " constructor\n");
 	};
 	~Schedule() {}
 
-	void init() const
+	void init() // const
 	{
-		DBG("Schedule init");
+		DBG(this->name << " init\n");
+		server->registerService(httpMethod::GET,
+			this->uri = String("/" + this->name.toLowerCase()), (Service*)this);
 	}
 
 	/*
@@ -24,14 +25,14 @@ public:
 		DBG("Booking Thread");
 	};
 	*/
-	/*
+	
 	void handleRequest(Request &request, StreamResponse &response)
 	{
 
 	}
-
-	bool registerService(httpMethod method, String route, Service* obj,
-		std::function<void(Request &request, StreamResponse &response)> func)
+/*
+	bool registerService(httpMethod method, String route, Service* proto) // ,
+//		std::function<void(Request &request, StreamResponse &response)> func)
 	{
 
 	}

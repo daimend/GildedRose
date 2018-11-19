@@ -5,18 +5,17 @@ class Booking : public Service
 {
 public:
 	IMPLEMENT_CLONE(Booking)
-	Booking() // : Thread("test")
+	Booking() 
 	{
-//		startThread();
-		DBG("BOOKING CONSTRUCTOR CALLED");
+		DBG(this->name << "constructor\n");
 	};
 	~Booking() {}
 
-	void init(ServerModule* server) const
+	void init(/*ServerModule* server*/) // const
 	{
-		DBG("Booking init");
-
-		protoTable.set(this->name, this->obj);
+		DBG(this->name << " init\n");
+		server->registerService(httpMethod::GET,
+			this->uri = String("/" + this->name.toLowerCase()), (Service*)this);
 	}
 
 	/*
@@ -25,12 +24,12 @@ public:
 		DBG("Booking Thread");
 	};
 	*/
-	/*
+	
 	void handleRequest(Request &request, StreamResponse &response)
 	{
 
 	}
-
+/*
 	bool registerService(httpMethod method, String route, Service* obj,
 		std::function<void(Request &request, StreamResponse &response)> func)
 	{
