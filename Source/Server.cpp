@@ -1,10 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-  ==============================================================================
-*/
 #pragma once
 #include "Server.h"
 #include "Services/Services.h"
@@ -51,13 +44,13 @@ bool ServerModule::registerService(httpMethod method, String route,
 {
 	addRoute("GET", "/hello", ServerModule, hello);
 }
-
-
-void ServerModule::hello(Request &request, StreamResponse &response)
-{
-	response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << "\n";
-}
 */
+
+void ServerModule::helloWorld(Request &request, StreamResponse &response)
+{
+	response << "Welcome to Gilded Rose! " << htmlEntities(request.get("name", "... what's your name ?")) << "\n";
+}
+
 
 bool ServerModule::registerService(httpMethod method_, String route_, Service* obj_)
 {
@@ -65,13 +58,10 @@ bool ServerModule::registerService(httpMethod method_, String route_, Service* o
 	return false;
 }
 
-// add endpoints for rest api calls
-// for now we'll simply setup the callbacks on this object
-// however this would be better handled by a "requestHandler"
-// object, dedicated to delegating service calls and response
+// setup URIs / endpoints for api calls
 void ServerModule::setupRoutes()
 {
-//	addRoute("GET", "/hello", ServerModule, hello);
+	addRoute("GET", "/gildedrose", ServerModule, helloWorld);
 }
 
 //==============================================================================

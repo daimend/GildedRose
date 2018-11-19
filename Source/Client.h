@@ -7,27 +7,19 @@
 	This could be done just as easily (perhaps more elegantly) in C++ or other
 	client side APIs (e.g. node.js).  However, this will satisfy legacy systems,
 	provide platform/device agnostic solution, and self contained (not dependent
-	on another API) solution. 
-	Notes:
-	* We'll load a standard HTML using XMLHttpRequest for the REST API endpoint
-	calls, and provide input/output to/from sever.  Unfortunately we cannot
-	assume the browser will support Fetch() API natively unless we inject it into
-	DOM, but this is beyond scope of exercise.
-	* We'll use a subclass of WebBrowserComponent to handle any callbacks from the
-	browser, however a separate Server thread will handle the actual http_request
-	callbacks.
+	on another API) solution.
 */
 class WebView : public WebBrowserComponent
 {
 public:
 	//==============================================================================
-	WebView()
-		//		: addressTextBox(addressBox)
+	WebView(TextEditor& addressBox): addressTextBox(addressBox)
 	{}
 
 	// This method gets called when the browser is about to go to a new URL..
 	bool pageAboutToLoad(const String& newURL) override
 	{
+		addressTextBox.setText(newURL, false);
 		return true;
 	}
 
@@ -39,7 +31,7 @@ public:
 	}
 
 private:
-	//	TextEditor& addressTextBox;
+	TextEditor& addressTextBox;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebView)
 };
@@ -53,12 +45,17 @@ public:
 	{
 		setOpaque(true);
 
+		// Create an address box..
+		addAndMakeVisible(addressTextBox);
+		addressTextBox.setTextToShowWhenEmpty("Enter a web address, e.g. https://localhost:8080/gildedrose", Colours::grey);
+		addressTextBox.onReturnKey = [this] { webView->goToURL(addressTextBox.getText()); };
+
 		// create the actual browser component
-		webView.reset(new WebView());
+		webView.reset(new WebView(addressTextBox));
 		addAndMakeVisible(webView.get());
 
-		URL path = URL(File::getSpecialLocation(File::currentExecutableFile).getParentDirectory().getChildFile("index.html"));
-		webView->goToURL(path.toString(false));
+//		URL path = URL(File::getSpecialLocation(File::currentExecutableFile).getParentDirectory().getChildFile("index.html"));
+		webView->goToURL("http://localhost:8080/gildedrose");
 
 		setSize(1000, 1000);
 	}
@@ -71,16 +68,19 @@ public:
 
 	void paint(Graphics& g) override
 	{
-
+		g.fillAll(Colours::grey);
 	}
 
 	void resized() override
 	{
-		webView->setBounds(0, 0, getWidth(), getHeight());
+		addressTextBox.setBounds(0, 0, getWidth(), 25);
+		webView->setBounds(0, addressTextBox.getHeight(), getWidth(), getHeight() - addressTextBox.getHeight());
 	}
 
 private:
 	std::unique_ptr<WebView> webView;
+
+	TextEditor addressTextBox;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebViewComponent)
 };

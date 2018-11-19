@@ -5,14 +5,14 @@
 </HEAD>
 <BODY>
 
-    Gilded Rose!
+    Welcome to Gilded Rose!
 
     <div id="response">
     </div>
 
     <div id="demo">
         <h1>The XMLHttpRequest Object</h1>
-        <button type="button" onclick="loadDoc()">Change Content</button>
+        <button type="button" onclick="loadDoc()">Test Load</button>
     </div>
 
     <script>
@@ -24,7 +24,7 @@
           this.responseText;
         }
       };
-      xhttp.open("GET", "http://localhost:8080/hello?name=Daimen", true);
+      xhttp.open("GET", "http://localhost:8080/gildedrose?name=", true);
       xhttp.send();
     }
     </script>

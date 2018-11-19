@@ -1,9 +1,8 @@
 #pragma once
-
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Client.h"
 #include "Models.h"
-// #include "Services/iService.h"
+
 using namespace Mongoose;
 
 /** REST API Methods */
@@ -26,9 +25,10 @@ class ServerModule : public Component, public WebController, public DeletedAtShu
 {
 public:
 	JUCE_DECLARE_SINGLETON(ServerModule, true)
-		//==============================================================================
+	//==============================================================================
 
-	//	void hello(Request &request, StreamResponse &response);
+	// test / landing page
+	void helloWorld(Request &request, StreamResponse &response);
 	//==============================================================================
 	/** registerService
 	 *  registers a service endpoint handler for the given method and path
@@ -37,6 +37,8 @@ public:
 	bool registerService(httpMethod method_, String route_, Service* obj_); // ,
 //		std::function<void(Request &request, StreamResponse &response)> func);
 	void setupRoutes();
+
+	// DD: TODO: Temporary (auto-generated) GUI for testing, disable for release
 	//==============================================================================
     void paint (Graphics&) override;
     void resized() override;
@@ -44,7 +46,7 @@ public:
 private:
 	ServerModule();
 	~ServerModule();
-    //==============================================================================
+	//==============================================================================
     // Your private member variables go here...
 	Server server;
 	ListenerList<Service> requestHandlers;

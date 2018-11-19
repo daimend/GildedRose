@@ -49,11 +49,8 @@ class Service : virtual public ServiceThread
 public:
 	virtual ~Service() {}
 
+	// httpHandler callback
 	virtual void handleRequest(Request &request, StreamResponse &response) = 0;
-
-		/** Register service with with server */
-//	virtual bool registerService(httpMethod method, String route, Service* proto) = 0;// ,
-	//		std::function<void(Request &request, StreamResponse &response)> func) = 0;
 
 	// called on each service when server starts for
 	// any initialization tasks
