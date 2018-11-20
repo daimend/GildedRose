@@ -18,6 +18,9 @@
 
 // (You can add your own code in this section, and the Projucer will not overwrite it)
 
+#define API_BASE_URL    "http://localhost:8080"
+#define API_DEFAULT_URL API_BASE_URL "/"
+
 // [END_USER_CODE_SECTION]
 
 /*

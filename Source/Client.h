@@ -47,7 +47,7 @@ public:
 
 		// Create an address box..
 		addAndMakeVisible(addressTextBox);
-		addressTextBox.setTextToShowWhenEmpty("Enter a web address, e.g. https://localhost:8080/gildedrose", Colours::grey);
+		addressTextBox.setTextToShowWhenEmpty(API_DEFAULT_URL, Colours::grey);
 		addressTextBox.onReturnKey = [this] { webView->goToURL(addressTextBox.getText()); };
 
 		// create the actual browser component
@@ -55,7 +55,7 @@ public:
 		addAndMakeVisible(webView.get());
 
 //		URL path = URL(File::getSpecialLocation(File::currentExecutableFile).getParentDirectory().getChildFile("index.html"));
-		webView->goToURL("http://localhost:8080/gildedrose");
+		webView->goToURL(API_DEFAULT_URL);
 
 		setSize(1000, 1000);
 	}

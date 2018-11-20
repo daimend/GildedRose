@@ -5,22 +5,64 @@
 
 using namespace Mongoose;
 
-/** REST API Methods */
-enum httpMethod { GET, POST, PUT, DEL };
+/** supported REST API Methods */
+enum httpMethod { GET, POST, PUT, DEL, ERR };
 
-static std::map< httpMethod, const char * > method = {
+static std::map< httpMethod, const char * > httpmethod = {
    {GET, "GET"},
    {POST, "POST"},
    {PUT, "PUT"},
-   {DEL, "DELETE"}
+   {DEL, "DELETE"},
+   {ERR, "ERROR"},
 };
 
 class Service;
 typedef Inn Database;
+
+struct ServiceHandler
+{
+	ServiceHandler(Service* service_, httpMethod method_, String route_) :
+		service(service_), method(method_), route(route_) {};
+	Service* service = nullptr;
+	httpMethod method = httpMethod::ERR;
+	String route = "/";
+};
+
+// Holds a list of Service handler callbacks
+// Callbacks/Messages can be broadcast to all services
+// or specific Service->Handlers.
+// This implementation is Thread safe via callAsync
+template <class ListenerClass,
+	class ArrayType = Array<ListenerClass*>>
+	class ServiceList : public virtual ListenerList<ListenerClass, Array<ListenerClass*>>
+{
+public:
+	ServiceList() {}
+	~ServiceList() {}
+
+	template <typename Callback>
+	void callAsync(ListenerClass* listenertoCall, Callback&& callback)
+	{
+		typename ArrayType::ScopedLockType lock(getListeners().getLock());
+
+		for (Iterator<DummyBailOutChecker, ThisType> iter(*this); iter.next();)
+		{
+			auto* l = iter.getListener();
+
+			if (l == listenertoCall)
+				callback(*l);
+		}
+	}
+};
+
 //==============================================================================
 /*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
+    ServerModule
+    Singleton instance manages all Sever<->Service communications as Subject to
+    Notify Service Handler (Observers) of service requests.
+    All Services must register their routes and callbacks with the ServerModule.
+    The ServerModule implements the servers Controller interface to register
+    Service listeners as endpoints of the API.
 */
 class ServerModule : public Component, public WebController, public DeletedAtShutdown
 {
@@ -35,13 +77,21 @@ public:
 	 *  registers a service endpoint handler for the given method and path
 	 *  @returns false if the path already exists
 	 */
-	bool registerService(httpMethod method_, String route_, Service* obj_); // ,
-//		std::function<void(Request &request, StreamResponse &response)> func
+	bool registerService(ServiceHandler* service_);
+	bool registerService(httpMethod method_, String route_, Service* obj_);
 
 	void serviceCallback(Request &request, StreamResponse &response);
 
+    //==============================================================================
+    /** registerService
+     * setup any default URIs / endpoints and their callbacks
+     * DD: TODO: while it might be fairly trivial to imlepement
+     * Node/Express style "route/key/:value" request parsing
+     * we'll stick to standard query strings for now...
+     */
 	void setupRoutes();
 
+	ServiceHandler* getHandler(String method_, String route_);
 	// DD: TODO: Temporary (auto-generated) GUI for testing, disable for release
 	//==============================================================================
     void paint (Graphics&) override;
@@ -51,9 +101,9 @@ private:
 	ServerModule();
 	~ServerModule();
 	//==============================================================================
-    // Your private member variables go here...
 	Server server;
-	ListenerList<Service> requestHandlers;
+	ServiceList<Service> serviceObjects;
+	OwnedArray<ServiceHandler> serviceHandlers;
 	std::unique_ptr<WebViewComponent> client;
 	std::unique_ptr<Database> database;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ServerModule)

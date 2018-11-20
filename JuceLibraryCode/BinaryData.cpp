@@ -7,7 +7,7 @@
 namespace BinaryData
 {
 
-//================== WebView.html ==================
+//================== index.html ==================
 static const unsigned char temp_binary_data_0[] =
 "<HTML>\r\n"
 "<HEAD>\r\n"
@@ -16,14 +16,14 @@ static const unsigned char temp_binary_data_0[] =
 "</HEAD>\r\n"
 "<BODY>\r\n"
 "\r\n"
-"    Gilded Rose!\r\n"
+"    Welcome to Gilded Rose!\r\n"
 "\r\n"
 "    <div id=\"response\">\r\n"
 "    </div>\r\n"
 "\r\n"
 "    <div id=\"demo\">\r\n"
 "        <h1>The XMLHttpRequest Object</h1>\r\n"
-"        <button type=\"button\" onclick=\"loadDoc()\">Change Content</button>\r\n"
+"        <button type=\"button\" onclick=\"loadDoc()\">Test Load</button>\r\n"
 "    </div>\r\n"
 "\r\n"
 "    <script>\r\n"
@@ -35,7 +35,7 @@ static const unsigned char temp_binary_data_0[] =
 "          this.responseText;\r\n"
 "        }\r\n"
 "      };\r\n"
-"      xhttp.open(\"GET\", \"http://localhost:8080/hello?name=Daimen\", true);\r\n"
+"      xhttp.open(\"GET\", \"http://localhost:8080/gildedrose?name=\", true);\r\n"
 "      xhttp.send();\r\n"
 "    }\r\n"
 "    </script>\r\n"
@@ -43,7 +43,7 @@ static const unsigned char temp_binary_data_0[] =
 "</BODY>\r\n"
 "</HTML>\r\n";
 
-const char* WebView_html = (const char*) temp_binary_data_0;
+const char* index_html = (const char*) temp_binary_data_0;
 
 
 const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
@@ -56,7 +56,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
 
     switch (hash)
     {
-        case 0xf9618c31:  numBytes = 759; return WebView_html;
+        case 0x2c834af8:  numBytes = 764; return index_html;
         default: break;
     }
 
@@ -66,12 +66,12 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
 
 const char* namedResourceList[] =
 {
-    "WebView_html"
+    "index_html"
 };
 
 const char* originalFilenames[] =
 {
-    "WebView.html"
+    "index.html"
 };
 
 const char* getNamedResourceOriginalFilename (const char* resourceNameUTF8)

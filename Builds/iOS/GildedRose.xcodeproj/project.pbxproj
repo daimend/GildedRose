@@ -41,9 +41,17 @@
 			isa = PBXBuildFile;
 			fileRef = CA78E9F6AF89DCCD2789DF0A;
 		};
-		65F0019F885F33686F6D5AFA = {
+		6BCF2474D8967E25D003ACD2 = {
 			isa = PBXBuildFile;
-			fileRef = 797ADDF60989B4F0C4135D19;
+			fileRef = 0DB57BFED4428ADD342FE20C;
+		};
+		3819704A3BEBCB9DC4EA85A6 = {
+			isa = PBXBuildFile;
+			fileRef = B726A0F5F4837E7EDB5E4E6A;
+		};
+		901DC2CD101B93B4370EBA29 = {
+			isa = PBXBuildFile;
+			fileRef = 7128B321BA8C4131BF7CA2AF;
 		};
 		5BC268B789EEF390BB55BF86 = {
 			isa = PBXBuildFile;
@@ -89,18 +97,18 @@
 			isa = PBXBuildFile;
 			fileRef = 0EC3EA7E9038009B6AFFDF22;
 		};
-		07422B988DFDB17D908EE1F2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = MainComponent.h;
-			path = ../../Source/MainComponent.h;
-			sourceTree = "SOURCE_ROOT";
-		};
 		0C7F63DA557CE1D42A1BF50F = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
 			name = "include_juce_gui_basics.mm";
 			path = "../../JuceLibraryCode/include_juce_gui_basics.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
+		0DB57BFED4428ADD342FE20C = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = Server.cpp;
+			path = ../../Source/Server.cpp;
 			sourceTree = "SOURCE_ROOT";
 		};
 		0EC3EA7E9038009B6AFFDF22 = {
@@ -131,6 +139,13 @@
 			path = "~/JUCE/modules/juce_gui_basics";
 			sourceTree = "<absolute>";
 		};
+		1A972612756EB43298ED640E = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Client.h;
+			path = ../../Source/Client.h;
+			sourceTree = "SOURCE_ROOT";
+		};
 		24D54285EE138882EE6CFAE1 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
@@ -150,6 +165,13 @@
 			lastKnownFileType = sourcecode.cpp.cpp;
 			name = "include_juce_analytics.cpp";
 			path = "../../JuceLibraryCode/include_juce_analytics.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
+		33AE4F1065F2EEDA8BF2D870 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Service.h;
+			path = ../../Source/Services/Service.h;
 			sourceTree = "SOURCE_ROOT";
 		};
 		41CFECF6F83F9FBBEFD09F49 = {
@@ -173,13 +195,6 @@
 			path = System/Library/Frameworks/MobileCoreServices.framework;
 			sourceTree = SDKROOT;
 		};
-		4E8B14521B87D2A0D47309B4 = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.html;
-			name = WebView.html;
-			path = ../../Source/WebView.html;
-			sourceTree = "SOURCE_ROOT";
-		};
 		54EA3DA5E53BD0893A291FD2 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
@@ -201,6 +216,13 @@
 			path = ../../JuceLibraryCode/BinaryData.h;
 			sourceTree = "SOURCE_ROOT";
 		};
+		657990D18BC4BAE30543D79A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Models.h;
+			path = ../../Source/Models.h;
+			sourceTree = "SOURCE_ROOT";
+		};
 		671F0DABDA8B4CDEF8AF8765 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
@@ -215,19 +237,19 @@
 			path = "../../JuceLibraryCode/include_juce_cryptography.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
+		7128B321BA8C4131BF7CA2AF = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = Services.cpp;
+			path = ../../Source/Services/Services.cpp;
+			sourceTree = "SOURCE_ROOT";
+		};
 		735B5962946D83858FE92214 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
 			name = "juce_graphics";
 			path = "~/JUCE/modules/juce_graphics";
 			sourceTree = "<absolute>";
-		};
-		797ADDF60989B4F0C4135D19 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = MainComponent.cpp;
-			path = ../../Source/MainComponent.cpp;
-			sourceTree = "SOURCE_ROOT";
 		};
 		80A7DA60757600E37C643FAD = {
 			isa = PBXFileReference;
@@ -243,6 +265,27 @@
 			path = System/Library/Frameworks/QuartzCore.framework;
 			sourceTree = SDKROOT;
 		};
+		8FB2CD77DC45EE21EF287F48 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Server.h;
+			path = ../../Source/Server.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		9B7D3455B2C621F86D3A8CF4 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Services.h;
+			path = ../../Source/Services/Services.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		9E38A29C2970A2286D804B36 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.html;
+			name = index.html;
+			path = ../../Source/index.html;
+			sourceTree = "SOURCE_ROOT";
+		};
 		A5372B878E756A7628BC7834 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
@@ -250,11 +293,11 @@
 			path = "~/JUCE/modules/juce_cryptography";
 			sourceTree = "<absolute>";
 		};
-		ABE71AA3DF51F88FB5BC9AE5 = {
+		ACA28AD47A0D793307F3E919 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			name = ClientWebView.h;
-			path = ../../Source/ClientWebView.h;
+			name = Booking.h;
+			path = ../../Source/Services/Booking.h;
 			sourceTree = "SOURCE_ROOT";
 		};
 		B5B4389970ADC3139C1086E1 = {
@@ -269,6 +312,13 @@
 			lastKnownFileType = sourcecode.cpp.objcpp;
 			name = "include_juce_core.mm";
 			path = "../../JuceLibraryCode/include_juce_core.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
+		B726A0F5F4837E7EDB5E4E6A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = Service.cpp;
+			path = ../../Source/Services/Service.cpp;
 			sourceTree = "SOURCE_ROOT";
 		};
 		B8075E7E767CEF409C7D019C = {
@@ -292,13 +342,6 @@
 			path = System/Library/Frameworks/UIKit.framework;
 			sourceTree = SDKROOT;
 		};
-		C57D17F4B218B0725404F82F = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = Inn.h;
-			path = ../../Source/Inn.h;
-			sourceTree = "SOURCE_ROOT";
-		};
 		C64051E93FE87C9FD06E3025 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -311,6 +354,13 @@
 			lastKnownFileType = folder.assetcatalog;
 			name = Images.xcassets;
 			path = GildedRose/Images.xcassets;
+			sourceTree = "SOURCE_ROOT";
+		};
+		CAFC9D8C1732D8D5A8E5253A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Schedule.h;
+			path = ../../Source/Services/Schedule.h;
 			sourceTree = "SOURCE_ROOT";
 		};
 		D4B377B220C7C1BEC085C065 = {
@@ -355,14 +405,28 @@
 			path = "~/JUCE/modules/juce_events";
 			sourceTree = "<absolute>";
 		};
+		4B1EB4591F5087EFCBF9CA04 = {
+			isa = PBXGroup;
+			children = (
+				ACA28AD47A0D793307F3E919,
+				CAFC9D8C1732D8D5A8E5253A,
+				B726A0F5F4837E7EDB5E4E6A,
+				33AE4F1065F2EEDA8BF2D870,
+				7128B321BA8C4131BF7CA2AF,
+				9B7D3455B2C621F86D3A8CF4,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
 		5B3587F0B4CACF85B57552E4 = {
 			isa = PBXGroup;
 			children = (
-				C57D17F4B218B0725404F82F,
-				ABE71AA3DF51F88FB5BC9AE5,
-				4E8B14521B87D2A0D47309B4,
-				07422B988DFDB17D908EE1F2,
-				797ADDF60989B4F0C4135D19,
+				1A972612756EB43298ED640E,
+				9E38A29C2970A2286D804B36,
+				657990D18BC4BAE30543D79A,
+				0DB57BFED4428ADD342FE20C,
+				8FB2CD77DC45EE21EF287F48,
+				4B1EB4591F5087EFCBF9CA04,
 				80A7DA60757600E37C643FAD,
 			);
 			name = Source;
@@ -678,7 +742,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65F0019F885F33686F6D5AFA,
+				6BCF2474D8967E25D003ACD2,
+				3819704A3BEBCB9DC4EA85A6,
+				901DC2CD101B93B4370EBA29,
 				5BC268B789EEF390BB55BF86,
 				6B06C2B47FDD46C6B8349E7A,
 				90F1E4BA3DD68CBC1F214C07,

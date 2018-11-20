@@ -1,5 +1,6 @@
 #pragma once
 #include "Service.h"
+#include "../Models.h"
 
 class Booking : public Service
 {
@@ -14,8 +15,9 @@ public:
 	void init(/*ServerModule* server*/) // const
 	{
 		DBG(this->name << " init\n");
-		server->registerService(httpMethod::GET,
-			this->uri = String("/" + this->name.toLowerCase()), (Service*)this);
+		server->registerService(new ServiceHandler((Service*)this, httpMethod::GET, this->uri));
+		server->registerService(new ServiceHandler((Service*)this, httpMethod::POST, this->uri));
+		// API service could also expose DELETE to remove a booking, etc.
 	}
 
 	/*
@@ -27,7 +29,7 @@ public:
 	
 	void handleRequest(Request &request, StreamResponse &response)
 	{
-
+        response << "handleRequest " << this->name;
 	}
 };
 

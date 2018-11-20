@@ -31,11 +31,17 @@ add_library( ${BINARY_NAME}
 
     SHARED
 
-    "../../../Source/Inn.h"
-    "../../../Source/ClientWebView.h"
-    "../../../Source/WebView.html"
-    "../../../Source/MainComponent.h"
-    "../../../Source/MainComponent.cpp"
+    "../../../Source/Client.h"
+    "../../../Source/index.html"
+    "../../../Source/Models.h"
+    "../../../Source/Server.cpp"
+    "../../../Source/Server.h"
+    "../../../Source/Services/Booking.h"
+    "../../../Source/Services/Schedule.h"
+    "../../../Source/Services/Service.cpp"
+    "../../../Source/Services/Service.h"
+    "../../../Source/Services/Services.cpp"
+    "../../../Source/Services/Services.h"
     "../../../Source/Main.cpp"
     "D:/Code/JUCE/modules/juce_analytics/analytics/juce_Analytics.cpp"
     "D:/Code/JUCE/modules/juce_analytics/analytics/juce_Analytics.h"
@@ -945,10 +951,14 @@ add_library( ${BINARY_NAME}
     "../../../JuceLibraryCode/JuceHeader.h"
 )
 
-set_source_files_properties("../../../Source/Inn.h" PROPERTIES HEADER_FILE_ONLY TRUE)
-set_source_files_properties("../../../Source/ClientWebView.h" PROPERTIES HEADER_FILE_ONLY TRUE)
-set_source_files_properties("../../../Source/WebView.html" PROPERTIES HEADER_FILE_ONLY TRUE)
-set_source_files_properties("../../../Source/MainComponent.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/Client.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/index.html" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/Models.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/Server.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/Services/Booking.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/Services/Schedule.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/Services/Service.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../Source/Services/Services.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties("D:/Code/JUCE/modules/juce_analytics/analytics/juce_Analytics.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties("D:/Code/JUCE/modules/juce_analytics/analytics/juce_Analytics.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties("D:/Code/JUCE/modules/juce_analytics/analytics/juce_ButtonTracker.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)

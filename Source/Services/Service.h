@@ -41,9 +41,9 @@ public:
 // abstract interface for service / endpoint implementations
 // =====================================================================
 /** Service
-	Interface for all Service implementations.
-	This interface provide object factory and prototype pattern methods
-	to allow each service to be implemented as independent modules via
+	Interface for modular (encapsulated) service implementations.
+	This interface also provide object factory / prototype pattern methods
+	to allow each service to be implemented as cloned modules and run via
 	dependency injection. 
  */
 class Service : virtual public ServiceThread

@@ -15,8 +15,7 @@ public:
 	void init() // const
 	{
 		DBG(this->name << " init\n");
-		server->registerService(httpMethod::GET,
-			this->uri = String("/" + this->name.toLowerCase()), (Service*)this);
+		server->registerService(new ServiceHandler((Service*)this, httpMethod::GET, this->uri));
 	}
 
 	/*
@@ -28,7 +27,7 @@ public:
 	
 	void handleRequest(Request &request, StreamResponse &response)
 	{
-
+		response << "handleRequest " << this->name;
 	}
 };
 

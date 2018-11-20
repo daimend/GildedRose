@@ -3,12 +3,19 @@
 <JUCERPROJECT id="rThALA" name="GildedRose" projectType="guiapp" jucerVersion="5.4.1">
   <MAINGROUP id="laiq1f" name="GildedRose">
     <GROUP id="{5F7F5333-EF47-6889-D6D0-8DC9552D61E8}" name="Source">
-      <FILE id="g7lfcq" name="Inn.h" compile="0" resource="0" file="Source/Inn.h"/>
-      <FILE id="xmaGSJ" name="ClientWebView.h" compile="0" resource="0" file="Source/ClientWebView.h"/>
-      <FILE id="ViosgH" name="WebView.html" compile="0" resource="1" file="Source/WebView.html"/>
-      <FILE id="Dy7mK5" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
-      <FILE id="oJW9af" name="MainComponent.cpp" compile="1" resource="0"
-            file="Source/MainComponent.cpp"/>
+      <FILE id="UGCaNV" name="Client.h" compile="0" resource="0" file="Source/Client.h"/>
+      <FILE id="mH7v6o" name="index.html" compile="0" resource="1" file="Source/index.html"/>
+      <FILE id="ewSJTO" name="Models.h" compile="0" resource="0" file="Source/Models.h"/>
+      <FILE id="CNAZI0" name="Server.cpp" compile="1" resource="0" file="Source/Server.cpp"/>
+      <FILE id="XjnRlR" name="Server.h" compile="0" resource="0" file="Source/Server.h"/>
+      <GROUP id="{B2096E13-48B3-B2B4-A55B-5887AD2D741A}" name="Services">
+        <FILE id="ckdIPZ" name="Booking.h" compile="0" resource="0" file="Source/Services/Booking.h"/>
+        <FILE id="QXVVxk" name="Schedule.h" compile="0" resource="0" file="Source/Services/Schedule.h"/>
+        <FILE id="Espiww" name="Service.cpp" compile="1" resource="0" file="Source/Services/Service.cpp"/>
+        <FILE id="NS4iNB" name="Service.h" compile="0" resource="0" file="Source/Services/Service.h"/>
+        <FILE id="WXbjms" name="Services.cpp" compile="1" resource="0" file="Source/Services/Services.cpp"/>
+        <FILE id="IigukV" name="Services.h" compile="0" resource="0" file="Source/Services/Services.h"/>
+      </GROUP>
       <FILE id="OCtNx6" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>

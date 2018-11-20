@@ -1,12 +1,4 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic startup code for a JUCE application.
-
-  ==============================================================================
-*/
+#pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
@@ -42,8 +34,10 @@ The cost is calculated per person according to this formula:
 */
 
 //==============================================================================
-
-// DD: TODO: break models out into separate files 
+/**
+    API Models
+    DD: TODO: break models out into separate class files 
+ */
 
 struct Capacity
 {
@@ -217,7 +211,7 @@ public:
 	int roomCount = 0;
 	String name;
 	OwnedArray<Room> rooms;
-	// Calendar 
+	// Calendar // DD: TODO need calendar object / thread
 };
 
 /*

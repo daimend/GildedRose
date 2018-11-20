@@ -43,21 +43,54 @@ void ServerModule::helloWorld(Request &request, StreamResponse &response)
 	response << "Welcome to Gilded Rose! " << htmlEntities(request.get("name", "... what's your name ?")) << "\n";
 }
 
-bool ServerModule::registerService(httpMethod method_, String route_, Service* obj_)
+bool ServerModule::registerService(httpMethod method_, String route_, Service* obj_) // ,std::function<void(Request &request, StreamResponse &response)> func)
 {
-	requestHandlers.add(obj_);
-	return false;
+
+	return true;
+}
+
+bool ServerModule::registerService(ServiceHandler* service_)
+{
+	// dd: todo: error checking, service added more than once, etc.
+	serviceHandlers.addIfNotAlreadyThere(service_);
+	serviceObjects.add(service_->service);
+	addRoute(httpmethod[service_->method], std::string(service_->route.getCharPointer()),
+		ServerModule, serviceCallback);
+	return true;
 }
 
 void ServerModule::serviceCallback(Request &request, StreamResponse &response)
 {
-	requestHandlers.call([&request, &response](Service& l) { l.handleRequest(request, response); });
+	String method = request.getMethod();
+	String url = request.getUrl();
+	DBG("method = " << method << " url = " << url);
+
+	ServiceHandler* handler = getHandler(method, url);
+	
+	if (handler)
+		serviceObjects.callAsync((Service*)handler->service,
+			[&request, &response](Service& l) { l.handleRequest(request, response); });
+	/*		*/
+
+//	MessageManager::getInstance()->callAsync([&request, &response](Service& l) { l.handleRequest(request, response); });
+//	requestHandlers.callAsync(l, [&request, &response](Service& l) { l.handleRequest(request, response); });
 }
 
-// setup any default URIs / endpoints
 void ServerModule::setupRoutes()
 {
-	addRoute("GET", "/gildedrose", ServerModule, helloWorld);
+	addRoute("GET", "/", ServerModule, helloWorld);
+}
+
+ServiceHandler* ServerModule::getHandler(String method_, String route_)
+{
+	for (int i = 0; i < serviceHandlers.size(); i++)
+	{
+		ServiceHandler* tmp = serviceHandlers.getUnchecked(i);
+		if (method_.compare(httpmethod[tmp->method]) == 0 
+			&& tmp->route == route_)
+			return tmp;
+	}
+	return nullptr;
 }
 
 //==============================================================================
