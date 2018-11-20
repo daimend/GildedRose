@@ -38,7 +38,7 @@ public:
 		bool booking = db->getBooking(numGuests, numLuggage, isBooking);
 
 		if (isBooking && booking == false) // booking failed
-			response << this->name << ": error: could not complete booking";
+			response << JSON::toString(this->name << ": error: could not complete booking!");
 		else
 			response << db->getOutput();
 	}

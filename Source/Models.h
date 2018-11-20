@@ -211,22 +211,21 @@ public:
 	}
 
 	// dd: todo: the business logic probably belongs elsewhere
-	// we'll implement as function of the Inn for now as the
-	// inn _should_ know everything about it's contents (rooms,
-	// cost, guests, etc.) 
+	// Possibly as function (procedure) of the db...
+	// We'll implement as function of the Inn for now as this
+	// is our pseudo db and the inn _should_ know everything 
+	// about it's contents (rooms, cost, guests, etc.) 
 	bool getBooking(int numGuests, int numLuggage, bool isBooking = false)
 	{
 		output = String::empty;
-
-		output = (JSON::toString(this));
-
 		return true;
 	}
 
 	// returns the object state as JSON or XML
+	// dd: todo: 
 	String getOutput(bool asJSON = true)
 	{
-
+		return output = asJSON ? (JSON::toString(this)) : ""; // XmlDocument doc(output) ;
 	}
 
 	int roomCount = 0;
@@ -243,6 +242,6 @@ public:
 	// * Since this is a "shared space" Inn, we might assume guests may come and go as they please...
 	//   however, for the sake of scheduling the length of stay of each guest must determined at booking
 	//   and we may have to assume the Inn has a checkout time.
-	//   -> As the scheduling endpoint implies a daily schedule for the gnomes, gnome will likely be active
+	//   -> As the scheduling endpoint implies a daily schedule for the Inn, the gnomes will likely be active
 	//   for one hour past checkout (unless the room is still occupied).
 */
