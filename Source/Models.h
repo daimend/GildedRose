@@ -166,7 +166,9 @@ private:
 
 // Note: Inn Object would likely be a singleton class,
 // unless Alison decided to franchise her Inn ;)
-class Inn // : public Thread
+// dd: TODO: implement as DyncamicObjecy 
+// to allow Javascript and JSON interoperability.
+class Inn : public DynamicObject 
 {
 public:
 	Inn(String name_) : name(name_)
@@ -208,18 +210,33 @@ public:
 		return nullptr;
 	}
 
+	// dd: todo: the business logic probably belongs elsewhere
+	// we'll implement as function of the Inn for now as the
+	// inn _should_ know everything about it's contents (rooms,
+	// cost, guests, etc.) 
+	bool getBooking(int numGuests, int numLuggage, bool isBooking = false)
+	{
+		output = String::empty;
+
+		output = (JSON::toString(this));
+
+		return true;
+	}
+
+	// returns the object state as JSON or XML
+	String getOutput(bool asJSON = true)
+	{
+
+	}
+
 	int roomCount = 0;
 	String name;
+	String output;
 	OwnedArray<Room> rooms;
 	// Calendar // DD: TODO need calendar object / thread
 };
 
 /*
-int main (int argc, char* argv[])
-{
-	// ..your code goes here!
-
-
 	// some assumptions about profitability
 	// * guests and luggage should be grouped into fewest rooms possible
 	//   -> if a room is for some reason empty for the night, it does not need to be cleaned by the gnomes
@@ -228,7 +245,4 @@ int main (int argc, char* argv[])
 	//   and we may have to assume the Inn has a checkout time.
 	//   -> As the scheduling endpoint implies a daily schedule for the gnomes, gnome will likely be active
 	//   for one hour past checkout (unless the room is still occupied).
-
-    return 0;
-}
 */

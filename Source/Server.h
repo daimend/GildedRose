@@ -82,10 +82,12 @@ public:
 
 	void serviceCallback(Request &request, StreamResponse &response);
 
+	Database* getDatabase() { return database.get(); };
+
     //==============================================================================
     /** registerService
      * setup any default URIs / endpoints and their callbacks
-     * DD: TODO: while it might be fairly trivial to imlepement
+     * DD: TODO: while it might be fairly trivial to impalement
      * Node/Express style "route/key/:value" request parsing
      * we'll stick to standard query strings for now...
      */

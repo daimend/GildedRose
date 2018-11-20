@@ -70,10 +70,6 @@ void ServerModule::serviceCallback(Request &request, StreamResponse &response)
 	if (handler)
 		serviceObjects.callAsync((Service*)handler->service,
 			[&request, &response](Service& l) { l.handleRequest(request, response); });
-	/*		*/
-
-//	MessageManager::getInstance()->callAsync([&request, &response](Service& l) { l.handleRequest(request, response); });
-//	requestHandlers.callAsync(l, [&request, &response](Service& l) { l.handleRequest(request, response); });
 }
 
 void ServerModule::setupRoutes()

@@ -29,7 +29,22 @@ public:
 	
 	void handleRequest(Request &request, StreamResponse &response)
 	{
-        response << "handleRequest " << this->name;
+		isBooking = String(request.getMethod()).compare(httpmethod[httpMethod::POST]) == 0;
+		numGuests = String(request.get("guests")).getIntValue();
+		numLuggage = String(request.get("luggage")).getIntValue();
+
+		Database* db = server->getDatabase();
+
+		bool booking = db->getBooking(numGuests, numLuggage, isBooking);
+
+		if (isBooking && booking == false) // booking failed
+			response << this->name << ": error: could not complete booking";
+		else
+			response << db->getOutput();
 	}
+
+	int numGuests;
+	int numLuggage;
+	bool isBooking;
 };
 
