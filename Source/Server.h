@@ -34,7 +34,7 @@ struct ServiceHandler
 // This implementation is Thread safe via callAsync
 template <class ListenerClass,
 	class ArrayType = Array<ListenerClass*>>
-	class ServiceList : public virtual ListenerList<ListenerClass, Array<ListenerClass*>>
+	class ServiceList : virtual public ListenerList<ListenerClass, Array<ListenerClass*>>
 {
 public:
 	ServiceList() {}
@@ -43,11 +43,11 @@ public:
 	template <typename Callback>
 	void callAsync(ListenerClass* listenertoCall, Callback&& callback)
 	{
-		typename ArrayType::ScopedLockType lock(getListeners().getLock());
+        typename ArrayType::ScopedLockType lock(this->getListeners().getLock());
 
-		for (Iterator<DummyBailOutChecker, ThisType> iter(*this); iter.next();)
+        for (int i = 0; i < this->getListeners().size(); i++)
 		{
-			auto* l = iter.getListener();
+			auto* l = this->getListeners()[i];
 
 			if (l == listenertoCall)
 				callback(*l);

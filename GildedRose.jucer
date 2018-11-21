@@ -18,6 +18,7 @@
       </GROUP>
       <FILE id="OCtNx6" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
+    <FILE id="ivfJMw" name="Readme.md" compile="0" resource="1" file="Readme.md"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">

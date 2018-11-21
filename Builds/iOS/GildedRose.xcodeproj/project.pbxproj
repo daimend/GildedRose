@@ -97,6 +97,20 @@
 			isa = PBXBuildFile;
 			fileRef = 0EC3EA7E9038009B6AFFDF22;
 		};
+		00AEA548ECBB88EF065A00E4 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_analytics";
+			path = "/Source/JUCE/modules/juce_analytics";
+			sourceTree = "<absolute>";
+		};
+		0A5CBA85ADA340D2FC0AE9B5 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_data_structures";
+			path = "/Source/JUCE/modules/juce_data_structures";
+			sourceTree = "<absolute>";
+		};
 		0C7F63DA557CE1D42A1BF50F = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -118,11 +132,11 @@
 			path = "../../JuceLibraryCode/include_juce_mongoose.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
-		129E09E5F300C8E9E128A618 = {
+		16D55E4F77F4F44A6A1A4F4C = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
-			name = "juce_core";
-			path = "~/JUCE/modules/juce_core";
+			name = "juce_events";
+			path = "/Source/JUCE/modules/juce_events";
 			sourceTree = "<absolute>";
 		};
 		185E32E91AC0B9D045A50723 = {
@@ -132,13 +146,6 @@
 			path = ../../JuceLibraryCode/AppConfig.h;
 			sourceTree = "SOURCE_ROOT";
 		};
-		1A1140C796B8886ABEDEC0E4 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_gui_basics";
-			path = "~/JUCE/modules/juce_gui_basics";
-			sourceTree = "<absolute>";
-		};
 		1A972612756EB43298ED640E = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
@@ -146,18 +153,11 @@
 			path = ../../Source/Client.h;
 			sourceTree = "SOURCE_ROOT";
 		};
-		24D54285EE138882EE6CFAE1 = {
+		2764EDC9218F3C3CE1F467FF = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
-			name = "juce_data_structures";
-			path = "~/JUCE/modules/juce_data_structures";
-			sourceTree = "<absolute>";
-		};
-		2BE1FA14734407F3703B24DB = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_gui_extra";
-			path = "~/JUCE/modules/juce_gui_extra";
+			name = "juce_gui_basics";
+			path = "/Source/JUCE/modules/juce_gui_basics";
 			sourceTree = "<absolute>";
 		};
 		2C4EFB486B3F5E3B1FE92FA7 = {
@@ -167,12 +167,26 @@
 			path = "../../JuceLibraryCode/include_juce_analytics.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
+		2D9FE17717749BCBAA1285DD = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_graphics";
+			path = "/Source/JUCE/modules/juce_graphics";
+			sourceTree = "<absolute>";
+		};
 		33AE4F1065F2EEDA8BF2D870 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			name = Service.h;
 			path = ../../Source/Services/Service.h;
 			sourceTree = "SOURCE_ROOT";
+		};
+		379923C5F9572E4821DCE95D = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_gui_extra";
+			path = "/Source/JUCE/modules/juce_gui_extra";
+			sourceTree = "<absolute>";
 		};
 		41CFECF6F83F9FBBEFD09F49 = {
 			isa = PBXFileReference;
@@ -194,6 +208,13 @@
 			name = MobileCoreServices.framework;
 			path = System/Library/Frameworks/MobileCoreServices.framework;
 			sourceTree = SDKROOT;
+		};
+		4EDAE0A1033CD8558CFF50E8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_cryptography";
+			path = "/Source/JUCE/modules/juce_cryptography";
+			sourceTree = "<absolute>";
 		};
 		54EA3DA5E53BD0893A291FD2 = {
 			isa = PBXFileReference;
@@ -223,13 +244,6 @@
 			path = ../../Source/Models.h;
 			sourceTree = "SOURCE_ROOT";
 		};
-		671F0DABDA8B4CDEF8AF8765 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_analytics";
-			path = "~/JUCE/modules/juce_analytics";
-			sourceTree = "<absolute>";
-		};
 		688A0AD5E7B69DFB480CBD53 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -244,11 +258,11 @@
 			path = ../../Source/Services/Services.cpp;
 			sourceTree = "SOURCE_ROOT";
 		};
-		735B5962946D83858FE92214 = {
+		7FE63752915D17DCB416463B = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
-			name = "juce_graphics";
-			path = "~/JUCE/modules/juce_graphics";
+			name = "juce_core";
+			path = "/Source/JUCE/modules/juce_core";
 			sourceTree = "<absolute>";
 		};
 		80A7DA60757600E37C643FAD = {
@@ -286,26 +300,12 @@
 			path = ../../Source/index.html;
 			sourceTree = "SOURCE_ROOT";
 		};
-		A5372B878E756A7628BC7834 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_cryptography";
-			path = "~/JUCE/modules/juce_cryptography";
-			sourceTree = "<absolute>";
-		};
 		ACA28AD47A0D793307F3E919 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			name = Booking.h;
 			path = ../../Source/Services/Booking.h;
 			sourceTree = "SOURCE_ROOT";
-		};
-		B5B4389970ADC3139C1086E1 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_mongoose";
-			path = "~/modules/juce_mongoose";
-			sourceTree = "<absolute>";
 		};
 		B6319242986386F98ABCE02D = {
 			isa = PBXFileReference;
@@ -327,6 +327,20 @@
 			name = "include_juce_events.mm";
 			path = "../../JuceLibraryCode/include_juce_events.mm";
 			sourceTree = "SOURCE_ROOT";
+		};
+		B87776790B751D420CA563F9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file.md;
+			name = Readme.md;
+			path = ../../Readme.md;
+			sourceTree = "SOURCE_ROOT";
+		};
+		B8A9B789FF101F4760D026C4 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_mongoose";
+			path = "/Source/modules/juce_mongoose";
+			sourceTree = "<absolute>";
 		};
 		BE455F0284632783A76D7081 = {
 			isa = PBXFileReference;
@@ -398,13 +412,6 @@
 			path = GildedRose.app;
 			sourceTree = "BUILT_PRODUCTS_DIR";
 		};
-		F93C12D407A4DB5FA47D1ED0 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_events";
-			path = "~/JUCE/modules/juce_events";
-			sourceTree = "<absolute>";
-		};
 		4B1EB4591F5087EFCBF9CA04 = {
 			isa = PBXGroup;
 			children = (
@@ -436,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				5B3587F0B4CACF85B57552E4,
+				B87776790B751D420CA563F9,
 			);
 			name = GildedRose;
 			sourceTree = "<group>";
@@ -443,15 +451,15 @@
 		8659BE08B6821A653DFCA6ED = {
 			isa = PBXGroup;
 			children = (
-				671F0DABDA8B4CDEF8AF8765,
-				129E09E5F300C8E9E128A618,
-				A5372B878E756A7628BC7834,
-				24D54285EE138882EE6CFAE1,
-				F93C12D407A4DB5FA47D1ED0,
-				735B5962946D83858FE92214,
-				1A1140C796B8886ABEDEC0E4,
-				2BE1FA14734407F3703B24DB,
-				B5B4389970ADC3139C1086E1,
+				00AEA548ECBB88EF065A00E4,
+				7FE63752915D17DCB416463B,
+				4EDAE0A1033CD8558CFF50E8,
+				0A5CBA85ADA340D2FC0AE9B5,
+				16D55E4F77F4F44A6A1A4F4C,
+				2D9FE17717749BCBAA1285DD,
+				2764EDC9218F3C3CE1F467FF,
+				379923C5F9572E4821DCE95D,
+				B8A9B789FF101F4760D026C4,
 			);
 			name = "JUCE Modules";
 			sourceTree = "<group>";
@@ -551,8 +559,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"../../JuceLibraryCode",
-					"$(HOME)/JUCE/modules",
-					"$(HOME)/modules",
+					"/Source/JUCE/modules",
+					"/Source/modules",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Info-App.plist;
@@ -596,8 +604,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"../../JuceLibraryCode",
-					"$(HOME)/JUCE/modules",
-					"$(HOME)/modules",
+					"/Source/JUCE/modules",
+					"/Source/modules",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Info-App.plist;
