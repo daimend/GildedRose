@@ -1,4 +1,4 @@
-### DD: TODO: Complete all questions
+### DD: TODO: Complete all questions...
 
 ●	Information on how to setup our environments to run your application.
 
