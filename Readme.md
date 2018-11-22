@@ -42,6 +42,11 @@ JUCE Cross Platform API: https://github.com/WeAreROLI/JUCE
 
 JUCE Mongoose http Server: https://github.com/cpenny42/juce_mongoose
 
+I decided to work with a cross-platform API which I am currently most familiar with and have all current tools / environment already installed. 
+I have used the JUCE cross-platform API extensively to develop several applications at all level in the stack (client, middleware, server).
+
+While the API Excercise may have been easier, faster, to implement directly in node.js, I felt using the JUCE API would help me best demonstrate developing the API itself as well as an understanding of development / implementation of adjacent layers in the stack (e.g. client, server).  Also, while this example uses primarly C++ and javascript, similar to node.js, the use of the JUCE cross-platform API would allow for any middleware API services, as well as any backend or client applications, to be implemented in native and managed code languages (C++, Obj-C, C#, Java, Javascript, etc.) based on the developers choice/experience.
+
 ●	How long did you spend on this exercise? If you had unlimited time to spend on this, how would you spend it and how would you prioritize each item? 
 
 ●	If you were going to implement a level of automated testing to prepare this for a production environment, how would you go about doing so?
