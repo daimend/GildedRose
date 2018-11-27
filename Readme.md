@@ -35,9 +35,9 @@ In this case only the Models (and/or underlying database in a real world system)
 
 ●	What documentation, websites, papers, etc. did you consult for this assignment?
 
-StackExchange
-JUCE Doxygen and forums
-RESTfulAPI.net
+* StackOverflow
+* JUCE Doxygen and forums
+* RESTfulAPI.net
 
 ●	What third-party libraries or other tools does your application use? How did you choose each library or framework you used?
 
@@ -58,13 +58,21 @@ This allows greater flexibility based on the project requirements and/or develop
 Due to some scheduling conflicts, I worked on this during a couple sessions for a total of about four or five hours.
 
 1) I did not have time to complete the business logic which handles the booking / scheduling.  I would make this first priority to make the Excercise feature complete, and would give it a time estimate of a couple hours given abuncance of queue and sorting methods which would simplify the logic.
-2) Add some layer of security, even if this was simple user:password to start, then adding layerd authentication model for different user levels.  Also adding encrytion / encoding to the communication transport.
-3) While not yet fully implemented, I chose to ensure the services were threadable so that the Shceduling / Calender could ultimately be made "live".  In this way, the system could also automate certain tasks such as sending notifications to the gnomes when it was time to clean room[x], to guests when their checkout time was near, etc.  And for the Innkeeper, obviously, admin level services to show occupancy and profitability over time, etc.
-4) Setup a real-world database and server for the API
-5) Implement unit testing and profiling (performance testing) for all layer of the stack; middleware/API, backend and clients. 
+2) Code cleanup, leak detection, and Error Checking:  Functional error cecking, implement try/catch blocks, critical sections, etc.
+3) Add some layer of security, even if this was simple user:password to start, then adding layerd authentication model for different user levels.  Also adding encrytion / encoding to the communication transport.
+4) While not yet fully implemented, I chose to ensure the services were threadable so that the Shceduling / Calender could ultimately be made "live".  In this way, the system could also automate certain tasks such as sending notifications to the gnomes when it was time to clean room[x], to guests when their checkout time was near, etc.  And for the Innkeeper, obviously, admin level services to show occupancy and profitability over time, etc.
+5) Setup a real-world database and server for the API
+6) Implement unit testing and profiling (performance testing) for all layer of the stack; middleware/API, backend and clients. 
 
 ●	If you were going to implement a level of automated testing to prepare this for a production environment, how would you go about doing so?
 
-In the case of JUCE, setting up unit testing is as simple as inheriting from UnitTest class, which can automate execution of each service/method and verify output.
-The same can be done for all server and client modules.  Had I been using another API, purely Java based for example, I might leverage existing toolsets (JUnit for example), or
-implement custom UnitTest classes, if such toolsets were unavailable, in much the same way existing 3rd party tools have established as standards.
+* In the case of JUCE, setting up unit testing is as simple as inheriting from UnitTest class, which can automate execution of each service/method and verify output.
+* The same can be done for all server and client modules.  
+* Had I been using another API, purely Java based for example, I might leverage existing toolsets (JUnit for example), or
+implement custom UnitTest classes, if such toolsets were unavailable, in much the same way existing 3rd party tools have established as standards.  
+* These approaches might also include:
+  * performing unit tests both at compile time and run time well 
+  * providing developer and QA department/engineers real world test cases for verification.
+  * leveraging mutliple live environments (e.g. staging, Beta/RC, and release) for internal and external testing, including backwards compatibility.
+
+ 

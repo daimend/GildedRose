@@ -39,12 +39,105 @@ The cost is calculated per person according to this formula:
     DD: TODO: break models out into separate class files 
  */
 
-struct Capacity
+struct Capacity : public DynamicObject
 {
-	int numPeople = 0;
-	int numLuggage = 0;
-	Capacity(int people_, int luggage_) : numPeople(people_), numLuggage(luggage_)
-	{}
+public:
+	int guests = 0;
+	int luggage = 0;
+
+	static Identifier getClassName() { return "Capacity"; }
+	
+	/*
+	static var getNumGuests(const var::NativeFunctionArgs& args)
+	{
+		Capacity* tmp = dynamic_cast<Capacity*>(args.thisObject.getObject());
+		if (tmp)
+			return tmp->guests;
+		else
+			args.thisObject.getDynamicObject()->getProperty("guests");
+	}
+	*/
+
+	const var& getProperty(const Identifier& propertyName) const
+	{
+		if (propertyName.toString().compare("luggage") == 0)
+			return this->luggage;
+		else if (propertyName.toString().compare("guest") == 0)
+			return this->guests;
+		return var::null;
+	}
+
+	/*
+	static var getNumLuggage(const var::NativeFunctionArgs& args)
+	{
+		Capacity* tmp = dynamic_cast<Capacity*>(args.thisObject.getObject());
+		if (tmp)
+			return tmp->luggage;
+		else
+			args.thisObject.getDynamicObject()->getProperty("luggage");
+	}
+	*/
+
+	Capacity() = delete;
+	Capacity(const Capacity &other) : Capacity(other.guests, other.luggage)
+	{
+	}
+
+	Capacity(int guests_, int luggage_) : guests(guests_), luggage(luggage_)
+	{
+//#define DECLARE_METHOD(name)  setMethod (#name, (var::MethodFunction) &MyObject::name)
+
+// 		DECLARE_METHOD(getNumGuests);
+// 		DECLARE_METHOD(getNumLuggage);
+//		setMethod("getNumGuests", (var::NativeFunction)&Capacity::getNumGuests);
+//		setMethod("getNumLuggage", (var::NativeFunction)&Capacity::getNumLuggage);
+		setProperty("guests", guests_);
+		setProperty("luggage", luggage_);
+	}
+
+	/*
+	int getProperty(String propertyName)
+	{
+		if (propertyName.compareIgnoreCase("guests"))
+			return guests;
+		if (propertyName.compareIgnoreCase("luggage"))
+			return luggage;
+		return - 1;
+	}
+	*/
+
+	// dd: todo: added standard operators for priority sorting by luggage...
+	// will probably want to add logic for guest, i.e. when luggage = 0, etc.
+	bool operator== (const Capacity &other) noexcept { return this->luggage == other.luggage; }
+	bool operator!= (const Capacity &other) noexcept { return this->luggage != other.luggage; }
+	bool operator<  (const Capacity &other) noexcept { return this->luggage < other.luggage; }
+	bool operator>  (const Capacity &other) noexcept { return this->luggage > other.luggage; }
+	bool operator<= (const Capacity &other) noexcept { return this->luggage <= other.luggage; }
+	bool operator>= (const Capacity &other) noexcept { return this->luggage >= other.luggage; }
+};
+
+//==============================================================================
+// A comparator used to sort our data when the user clicks a column header
+class CapacitySort
+{
+public:
+	CapacitySort(const String& attributeToSortBy, bool forwards = true)
+		: attributeToSort(attributeToSortBy),
+		direction(forwards ? 1 : -1)
+	{
+	}
+
+	int compareElements(Capacity* first, Capacity* second) const
+	{
+		auto result = first < second ? -1 
+			: first > second ? 1 : 0;
+
+		return direction * result;
+	}
+
+private:
+	String attributeToSort;
+	int direction;
 };
 
 class Gnomes
@@ -57,71 +150,76 @@ class Gnomes
     int duration = 60; // in minutes
 };
 
-class Guest
+class Guest : public Capacity
 {
 public:
-	Guest(int id_, Capacity capacity_, int duration_) : id(id_), capacity(capacity_), duration(duration_)
+	Guest(int id_, Capacity capacity_, int duration_ = -1) : Capacity(capacity_), id(id_), duration(duration_)
 	{
+		setProperty("id", id);
 	};
 	~Guest() {};
 
-	Capacity getCapacity() { return this->capacity; };
-	int getNumPeople() { return this->capacity.numPeople; }
-	int getNumLuggage() { return this->capacity.numLuggage; }
+	Capacity* getCapacity() { return (Capacity*)this; };
+	int getNumGuests() { return getCapacity()->guests; }
+	int getNumLuggage() { return getCapacity()->luggage; }
 
 private:
-	Capacity capacity; // number of people and bags in the guest object
+//	Capacity capacity; // number of people and bags in the guest object
 	int id; // guest id
 	int duration = 0; // length of stay
 };
 
-class Room
+class Room : public Capacity
 {
 public:
-	Room(int roomNumber_, Capacity capacity_) : id(roomNumber_), capacity(capacity_), occupied(0,0)
+	Room(int roomNumber_, Capacity capacity_) : Capacity(capacity_), id(roomNumber_), occupied(0,0)
 	{
+		setProperty("id", roomNumber_);
+//		this->occupied = new Occupied(Capacity(0, 0));
+
+
     };
 	~Room()
 	{
-		guests.clear();
+//		bookedGuests.clear();
 	}
 
-	Capacity getCapacity() { return this->capacity; };
+	Capacity* getCapacity() { return (Capacity*)this; };
 	int getRoomNumber() { return this->id; };
 
 	int getNumOccupants() 
 	{
-		this->occupied.numPeople = 0;
-		for (int i = 0; i < guests.size(); i++)
-			this->occupied.numPeople += guests[i]->getCapacity().numPeople;
+		this->occupied.guests = 0;
+		for (int i = 0; i < bookedGuests.size(); i++)
+			this->occupied.guests += bookedGuests[i]->guests;
 
-		return this->occupied.numPeople;
+		return this->occupied.guests;
 	};
 
 	int getNumLuggage()
 	{
-		this->occupied.numLuggage = 0;
-		for (int i = 0; i < guests.size(); i++)
-			this->occupied.numLuggage += guests[i]->getCapacity().numLuggage;
+		this->occupied.luggage = 0;
+		for (int i = 0; i < bookedGuests.size(); i++)
+			this->occupied.luggage += bookedGuests[i]->luggage;
 
-		return this->occupied.numLuggage;
+		return this->occupied.luggage;
 	};
 
 	Capacity getVacanies()
 	{
-		return Capacity(this->capacity.numPeople - this->getNumOccupants(),
-			this->capacity.numLuggage - this->getNumLuggage());
+		return Capacity(this->guests - this->getNumOccupants(),
+			this->luggage - this->getNumLuggage());
 	}
 
 	bool addGuest(Guest* guest_)
 	{
-		if (!guests.contains(guest_) // if the guest is already here, call the cops, they're impersonators!
+		if (!bookedGuests.contains(guest_)
 			&&
-			(guest_->getCapacity().numPeople < this->getVacanies().numPeople
-			&& guest_->getCapacity().numLuggage < this->getVacanies().numPeople)
+			(guest_->guests < this->guests
+			&& guest_->luggage < this->luggage)
             )
 		{
-			guests.add(guest_);
+			bookedGuests.add(guest_);
 			return true;
 		}
 		return false;
@@ -129,9 +227,9 @@ public:
 
 	bool removeGuest(Guest* guest_)
 	{
-		if (guests.contains(guest_))
+		if (bookedGuests.contains(guest_))
 		{
-			guests.remove(&guest_);
+			bookedGuests.remove(&guest_);
 			return true;
 		}
 		return false;
@@ -153,27 +251,60 @@ public:
 		return this->storageCost;
 	}
 
+	Guest* getGuest(int index) {
+
+		if (index < bookedGuests.size())
+			return bookedGuests[index];
+		return nullptr;
+	}
+
+	/*
+	struct Occupied : public Capacity
+	{
+		Occupied(Capacity occupied_) : Capacity(occupied_)
+		{
+			setProperty("occupiedGuests", guests);
+			setProperty("occupiedLuggage", luggage);
+		};
+	
+	};
+	*/
+
+	void varSetProperty(var& object, String key, var value) {
+		
+	}
+
 private:
 	int id = 0;
 
 	int roomCost = 10;
 	int storageCost = 2;
-
-	Array<Guest*> guests;
-	Capacity capacity;
+	std::function<void(var&, String, var)> JSONHelper;
+	Array<Guest*> bookedGuests;
+//	Occupied* occupied;
+//	Capacity capacity;
 	Capacity occupied;
 };
 
 // Note: Inn Object would likely be a singleton class,
 // unless Alison decided to franchise her Inn ;)
-// dd: TODO: implement as DyncamicObjecy 
+// dd: TODO: implement as DyncamicObject 
 // to allow Javascript and JSON interoperability.
-class Inn : public DynamicObject 
+// Using the DynamicObject and JSON structures also
+// allow these objects to be used directly with
+// PushNotifications and InAppPurchases
+// In the context of this API, the PushNotifications
+// in conjunction with the calendar thread
+// could be used to notify the gnomes when its time
+// to clean room[x], the guests when its time to
+// vacate room[x], etc.
+class Inn // : public DynamicObject
 {
 public:
-	Inn(String name_) : name(name_)
+	Inn(String _name) : name(_name)
 	{
-
+// 		String sortParam = "luggage";
+// 		sorter = new CapacitySort(sortParam);
 	}
 	~Inn() 
 	{
@@ -194,12 +325,28 @@ public:
 	// more robust object factory usage implied.
 	Room* addRoom(Capacity capacity_)
 	{
-		rooms.add(new Room(roomCount++, capacity_));
-		DBG("room#" << rooms.getLast()->getRoomNumber() <<
-			" maxPeople=" << rooms.getLast()->getCapacity().numPeople <<
-			" maxLuggage " << rooms.getLast()->getCapacity().numLuggage);
+		DBG("addRoom capacity: guests= " << capacity_.guests << " luggage = " << capacity_.luggage);
+		CapacitySort sorter(String("luggage"));
+		int index = rooms.addSorted(sorter, new Room(roomCount++, capacity_));
+//		rooms.add(new Room(roomCount++, capacity_));
+
+/*		DBG("room#" << rooms.getLast()->getRoomNumber() <<
+			" maxPeople=" << rooms.getLast()->guests <<
+			" maxLuggage " << rooms.getLast()->luggage);
+*/
+		DBG("room#" << rooms[index]->getRoomNumber() <<
+			" maxPeople=" << rooms[index]->guests <<
+			" maxLuggage " << rooms[index]->luggage);
+
+		/*
+		room#0 maxPeople=2 maxLuggage 1
+		room#1 maxPeople=2 maxLuggage 0
+		room#2 maxPeople=1 maxLuggage 2
+		room#3 maxPeople=1 maxLuggage 0
+		*/
 
 		return rooms.getLast();
+// 		return rooms[index];
 	}
 
 	Room* getRoomById(int id)
@@ -217,7 +364,83 @@ public:
 	// about it's contents (rooms, cost, guests, etc.) 
 	bool getBooking(int numGuests, int numLuggage, bool isBooking = false)
 	{
+		Guest* guest = guests.add(new Guest(guestId++, Capacity(numGuests, numLuggage)));
+
+		int filledGuests = 0; 
+		int filledLuggage = 0;
+		while (filledGuests < numGuests && filledLuggage < numLuggage)
+		{
+			int maxLuggage = 0;
+			Room* fillRoom = nullptr;
+			for (int i = 0; i < rooms.size(); i++)
+			{
+				if (rooms[i]->getVacanies().luggage > maxLuggage)
+				{
+					maxLuggage = rooms[i]->getVacanies().luggage;
+					fillRoom = rooms[i];
+				}
+			}
+
+			if (numLuggage > maxLuggage)
+				fillRoom->addGuest()
+
+		}
+
 		output = String::empty;
+
+		auto JSONHelper =
+			[](juce::var& object, juce::String key, juce::var value) {
+			if (object.isObject()) {
+				object.getDynamicObject()->setProperty(key, value);
+			}
+		};
+
+		auto nestedObject = [JSONHelper](const String& id1, const juce::var val1) {
+			var newObj(new DynamicObject());
+			JSONHelper(newObj, id1, val1);
+			return newObj;
+		};
+
+//		JSONHelper(newArrayObj, "guest", Array<var>());
+
+		
+		for (int i = 0; i < rooms.size(); i++)
+		{
+			var json(rooms[i]);
+			for (int ii = 0; i < rooms[i]->getNumOccupants(); ii++)
+			{
+				DynamicObject* guests = rooms[i]->getGuest(ii);
+				rooms[i]->setProperty("guest", guests);
+			}
+			output += (JSON::toString(json));
+		}
+
+		/*
+		output = {
+  "getNumGuests": Method,
+  "getNumLuggage": Method,
+  "guests": 2,
+  "luggage": 1
+}{
+  "getNumGuests": Method,
+  "getNumLuggage": Method,
+  "guests": 2,
+  "luggage": 0
+}{
+  "getNumGuests": Method,
+  "getNumLuggage": Method,
+  "guests": 1,
+  "luggage": 2
+}{
+  "getNumGuests": Method,
+  "getNumLuggage": Method,
+  "guests": 1,
+  "luggage": 0
+}
+		*/
+
+		DBG("output = " << output);
+
 		return true;
 	}
 
@@ -225,23 +448,55 @@ public:
 	// dd: todo: 
 	String getOutput(bool asJSON = true)
 	{
-		return output = asJSON ? (JSON::toString(this)) : ""; // XmlDocument doc(output) ;
+		return output; // = asJSON ? (JSON::toString(this)) : ""; // XmlDocument doc(output) ;
 	}
 
+	int guestId = 0;
 	int roomCount = 0;
 	String name;
 	String output;
+	OwnedArray<Guest> guests;
 	OwnedArray<Room> rooms;
-	// Calendar // DD: TODO need calendar object / thread
+//	CapacitySort* sorter;
+	// Calendar // DD: TODO need calendar object / thread for real-time booking/scheduling
 };
 
 /*
 	// some assumptions about profitability
 	// * guests and luggage should be grouped into fewest rooms possible
 	//   -> if a room is for some reason empty for the night, it does not need to be cleaned by the gnomes
-	// * Since this is a "shared space" Inn, we might assume guests may come and go as they please...
-	//   however, for the sake of scheduling the length of stay of each guest must determined at booking
-	//   and we may have to assume the Inn has a checkout time.
+	// * Since this is a "shared space" Inn we might assume:
+	//   1) Guests can be split up between multiple rooms, however
+	//		1a) Since "guests cannot store their luggage in another guests room", the luggage must be linked to
+	//		    at least one guest in the party
+	//   2) For the sake of scheduling the length of stay of each guest must determined at booking
+	//      and we may have to assume the Inn has a checkout time.
 	//   -> As the scheduling endpoint implies a daily schedule for the Inn, the gnomes will likely be active
 	//   for one hour past checkout (unless the room is still occupied).
+
+	///  So, based on these assumptions let's make some examples we can test:
+	// first we'll test to see if our code works
+	// then we'll see if letting guests 'share rooms' is more profitable
+	// then we'll optimize our code for the most efficient sort
+	// The XML/JSON libs already implement sort / comparator methods for child/nodes, so way will probably lean on
+	// this first for simplicity.  Optionally SortedSet<> and/or ElementComparator will accomplish same.
+
+	// sort rooms by max luggage capacity
+			room#2 max.guests=1 max.luggage 2 occupied.guests=0 occupied.luggage=0 vacant.guests = 1 vacant.luggae = 2
+			room#0 max.guests=2 max.luggage 1 occupied.guests=0 occupied.luggage=0 vacant.guests = 2 vacant.luggae = 1
+			room#1 max.guests=2 max.luggage 0 occupied.guests=0 occupied.luggage=0 vacant.guests = 2 vacant.luggae = 0
+			room#3 max.guests=1 max.luggage 0 occupied.guests=0 occupied.luggage=0 vacant.guests = 1 vacant.luggae = 0
+
+	addGuest(guests:2, luggage:3);
+
+			room#2 max.guests=1 max.luggage 2 occupied.guests=1 occupied.luggage=2 vacant.guests = 0 vacant.luggae = 0
+			room#0 max.guests=2 max.luggage 1 occupied.guests=1 occupied.luggage=1 vacant.guests = 1 vacant.luggae = 0
+			room#1 max.guests=2 max.luggage 0 occupied.guests=0 occupied.luggage=0 vacant.guests = 2 vacant.luggae = 0
+			room#3 max.guests=1 max.luggage 0 occupied.guests=0 occupied.luggage=0 vacant.guests = 1 vacant.luggae = 0
+
+	// in this scenario we've split the guests up between rooms 2 and 0, when we would have otherwise had to turn them
+	// away (no room holds 3 luggage), however, the inn has no storage left, and would have to turn away any guests
+	// with luggage.
+
 */
+
