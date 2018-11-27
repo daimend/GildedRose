@@ -84,6 +84,9 @@ static const unsigned char temp_binary_data_1[] =
 "\r\n"
 "\xe2\x97\x8f\tWhat documentation, websites, papers, etc. did you consult for this assignment?\r\n"
 "\r\n"
+"* StackOverflow\r\n"
+"* JUCE Doxygen and forums\r\n"
+"* RESTfulAPI.net\r\n"
 "\r\n"
 "\xe2\x97\x8f\tWhat third-party libraries or other tools does your application use? How did you choose each library or framework you used?\r\n"
 "\r\n"
@@ -95,12 +98,37 @@ static const unsigned char temp_binary_data_1[] =
 "I have used the JUCE cross-platform API extensively to develop several applications at all level in the stack (client, middleware, server).\r\n"
 "\r\n"
 "While the API Excercise may have been easier, faster, to implement directly in node.js, I felt using the JUCE API would help me best demonstrate developing the API itself as well as an understanding of development / implementation of adjacent layers "
-"in the stack (e.g. client, server).  Also, while this example uses primarly C++ and javascript, similar to node.js, the use of the JUCE cross-platform API would allow for any middleware API services, as well as any backend or client applications, to "
-"be implemented in native and managed code languages (C++, Obj-C, C#, Java, Javascript, etc.) based on the developers choice/experience.\r\n"
+"in the stack (e.g. client, server).  \r\n"
+"\r\n"
+"Also, while this example uses primarly C++ and javascript, similar to node.js, the use of the JUCE cross-platform API would allow for any middleware API services, as well as any backend or client applications, to be implemented in native and managed "
+"code languages (C++, Obj-C, C#, Java, Javascript, etc.).\r\n"
+"This allows greater flexibility based on the project requirements and/or developer experience.\r\n"
 "\r\n"
 "\xe2\x97\x8f\tHow long did you spend on this exercise? If you had unlimited time to spend on this, how would you spend it and how would you prioritize each item? \r\n"
 "\r\n"
-"\xe2\x97\x8f\tIf you were going to implement a level of automated testing to prepare this for a production environment, how would you go about doing so?\r\n";
+"Due to some scheduling conflicts, I worked on this during a couple sessions for a total of about four or five hours.\r\n"
+"\r\n"
+"1) I did not have time to complete the business logic which handles the booking / scheduling.  I would make this first priority to make the Excercise feature complete, and would give it a time estimate of a couple hours given abuncance of queue and s"
+"orting methods which would simplify the logic.\r\n"
+"2) Code cleanup, leak detection, and Error Checking:  Functional error cecking, implement try/catch blocks, critical sections, etc.\r\n"
+"3) Add some layer of security, even if this was simple user:password to start, then adding layerd authentication model for different user levels.  Also adding encrytion / encoding to the communication transport.\r\n"
+"4) While not yet fully implemented, I chose to ensure the services were threadable so that the Shceduling / Calender could ultimately be made \"live\".  In this way, the system could also automate certain tasks such as sending notifications to the gn"
+"omes when it was time to clean room[x], to guests when their checkout time was near, etc.  And for the Innkeeper, obviously, admin level services to show occupancy and profitability over time, etc.\r\n"
+"5) Setup a real-world database and server for the API\r\n"
+"6) Implement unit testing and profiling (performance testing) for all layer of the stack; middleware/API, backend and clients. \r\n"
+"\r\n"
+"\xe2\x97\x8f\tIf you were going to implement a level of automated testing to prepare this for a production environment, how would you go about doing so?\r\n"
+"\r\n"
+"* In the case of JUCE, setting up unit testing is as simple as inheriting from UnitTest class, which can automate execution of each service/method and verify output.\r\n"
+"* The same can be done for all server and client modules.  \r\n"
+"* Had I been using another API, purely Java based for example, I might leverage existing toolsets (JUnit for example), or\r\n"
+"implement custom UnitTest classes, if such toolsets were unavailable, in much the same way existing 3rd party tools have established as standards.  \r\n"
+"* These approaches might also include:\r\n"
+"  * performing unit tests both at compile time and run time well \r\n"
+"  * providing developer and QA department/engineers real world test cases for verification.\r\n"
+"  * leveraging mutliple live environments (e.g. staging, Beta/RC, and release) for internal and external testing, including backwards compatibility.\r\n"
+"\r\n"
+" ";
 
 const char* Readme_md = (const char*) temp_binary_data_1;
 
@@ -116,7 +144,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
     switch (hash)
     {
         case 0x2c834af8:  numBytes = 764; return index_html;
-        case 0x35d2b1a8:  numBytes = 4231; return Readme_md;
+        case 0x35d2b1a8:  numBytes = 6604; return Readme_md;
         default: break;
     }
 

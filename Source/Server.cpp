@@ -34,8 +34,12 @@ ServerModule::~ServerModule()
 {
 	if (client)
 		client = nullptr;
+    
+    if (database)
+        database = nullptr;
 
 	clearSingletonInstance();
+ 
 }
 
 void ServerModule::helloWorld(Request &request, StreamResponse &response)

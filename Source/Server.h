@@ -64,7 +64,7 @@ public:
     The ServerModule implements the servers Controller interface to register
     Service listeners as endpoints of the API.
 */
-class ServerModule : public Component, public WebController, public DeletedAtShutdown
+class ServerModule : public Component, public WebController //, public DeletedAtShutdown
 {
 public:
 	JUCE_DECLARE_SINGLETON(ServerModule, true)

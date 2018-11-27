@@ -46,37 +46,15 @@ public:
 	int luggage = 0;
 
 	static Identifier getClassName() { return "Capacity"; }
-	
-	/*
-	static var getNumGuests(const var::NativeFunctionArgs& args)
-	{
-		Capacity* tmp = dynamic_cast<Capacity*>(args.thisObject.getObject());
-		if (tmp)
-			return tmp->guests;
-		else
-			args.thisObject.getDynamicObject()->getProperty("guests");
-	}
-	*/
 
-	const var& getProperty(const Identifier& propertyName) const
+	virtual const var& getProperty(const Identifier& propertyName) const
 	{
 		if (propertyName.toString().compare("luggage") == 0)
-			return this->luggage;
+			return (var)this->luggage;
 		else if (propertyName.toString().compare("guest") == 0)
-			return this->guests;
+			return (var)this->guests;
 		return var::null;
 	}
-
-	/*
-	static var getNumLuggage(const var::NativeFunctionArgs& args)
-	{
-		Capacity* tmp = dynamic_cast<Capacity*>(args.thisObject.getObject());
-		if (tmp)
-			return tmp->luggage;
-		else
-			args.thisObject.getDynamicObject()->getProperty("luggage");
-	}
-	*/
 
 	Capacity() = delete;
 	Capacity(const Capacity &other) : Capacity(other.guests, other.luggage)
@@ -85,39 +63,14 @@ public:
 
 	Capacity(int guests_, int luggage_) : guests(guests_), luggage(luggage_)
 	{
-//#define DECLARE_METHOD(name)  setMethod (#name, (var::MethodFunction) &MyObject::name)
-
-// 		DECLARE_METHOD(getNumGuests);
-// 		DECLARE_METHOD(getNumLuggage);
-//		setMethod("getNumGuests", (var::NativeFunction)&Capacity::getNumGuests);
-//		setMethod("getNumLuggage", (var::NativeFunction)&Capacity::getNumLuggage);
 		setProperty("guests", guests_);
 		setProperty("luggage", luggage_);
 	}
-
-	/*
-	int getProperty(String propertyName)
-	{
-		if (propertyName.compareIgnoreCase("guests"))
-			return guests;
-		if (propertyName.compareIgnoreCase("luggage"))
-			return luggage;
-		return - 1;
-	}
-	*/
-
-	// dd: todo: added standard operators for priority sorting by luggage...
-	// will probably want to add logic for guest, i.e. when luggage = 0, etc.
-	bool operator== (const Capacity &other) noexcept { return this->luggage == other.luggage; }
-	bool operator!= (const Capacity &other) noexcept { return this->luggage != other.luggage; }
-	bool operator<  (const Capacity &other) noexcept { return this->luggage < other.luggage; }
-	bool operator>  (const Capacity &other) noexcept { return this->luggage > other.luggage; }
-	bool operator<= (const Capacity &other) noexcept { return this->luggage <= other.luggage; }
-	bool operator>= (const Capacity &other) noexcept { return this->luggage >= other.luggage; }
+    ~Capacity() {}
 };
 
 //==============================================================================
-// A comparator used to sort our data when the user clicks a column header
+// A comparator used to sort our data
 class CapacitySort
 {
 public:
@@ -129,8 +82,8 @@ public:
 
 	int compareElements(Capacity* first, Capacity* second) const
 	{
-		auto result = first < second ? -1 
-			: first > second ? 1 : 0;
+		auto result = (int)first->getProperty(attributeToSort) < (int)second->getProperty(attributeToSort) ? -1
+			: first->getProperty(attributeToSort) > second->getProperty(attributeToSort) ? 1 : 0;
 
 		return direction * result;
 	}
@@ -164,7 +117,6 @@ public:
 	int getNumLuggage() { return getCapacity()->luggage; }
 
 private:
-//	Capacity capacity; // number of people and bags in the guest object
 	int id; // guest id
 	int duration = 0; // length of stay
 };
@@ -175,13 +127,10 @@ public:
 	Room(int roomNumber_, Capacity capacity_) : Capacity(capacity_), id(roomNumber_), occupied(0,0)
 	{
 		setProperty("id", roomNumber_);
-//		this->occupied = new Occupied(Capacity(0, 0));
-
-
     };
 	~Room()
 	{
-//		bookedGuests.clear();
+		bookedGuests.clear();
 	}
 
 	Capacity* getCapacity() { return (Capacity*)this; };
@@ -258,18 +207,6 @@ public:
 		return nullptr;
 	}
 
-	/*
-	struct Occupied : public Capacity
-	{
-		Occupied(Capacity occupied_) : Capacity(occupied_)
-		{
-			setProperty("occupiedGuests", guests);
-			setProperty("occupiedLuggage", luggage);
-		};
-	
-	};
-	*/
-
 	void varSetProperty(var& object, String key, var value) {
 		
 	}
@@ -279,10 +216,7 @@ private:
 
 	int roomCost = 10;
 	int storageCost = 2;
-	std::function<void(var&, String, var)> JSONHelper;
 	Array<Guest*> bookedGuests;
-//	Occupied* occupied;
-//	Capacity capacity;
 	Capacity occupied;
 };
 
@@ -303,12 +237,11 @@ class Inn // : public DynamicObject
 public:
 	Inn(String _name) : name(_name)
 	{
-// 		String sortParam = "luggage";
-// 		sorter = new CapacitySort(sortParam);
 	}
 	~Inn() 
 	{
-		rooms.clear();
+        
+		rooms.clear(false);
 	};
 
 	// DD: TODO: Initializing the Inn may also create/start
@@ -327,23 +260,18 @@ public:
 	{
 		DBG("addRoom capacity: guests= " << capacity_.guests << " luggage = " << capacity_.luggage);
 		CapacitySort sorter(String("luggage"));
-		int index = rooms.addSorted(sorter, new Room(roomCount++, capacity_));
-//		rooms.add(new Room(roomCount++, capacity_));
+//		int index = rooms.addSorted(sorter, new Room(roomCount++, capacity_));
+		rooms.add(new Room(roomCount++, capacity_));
 
-/*		DBG("room#" << rooms.getLast()->getRoomNumber() <<
+		DBG("room#" << rooms.getLast()->getRoomNumber() <<
 			" maxPeople=" << rooms.getLast()->guests <<
 			" maxLuggage " << rooms.getLast()->luggage);
-*/
-		DBG("room#" << rooms[index]->getRoomNumber() <<
+
+/*		DBG("room#" << rooms[index]->getRoomNumber() <<
 			" maxPeople=" << rooms[index]->guests <<
 			" maxLuggage " << rooms[index]->luggage);
 
-		/*
-		room#0 maxPeople=2 maxLuggage 1
-		room#1 maxPeople=2 maxLuggage 0
-		room#2 maxPeople=1 maxLuggage 2
-		room#3 maxPeople=1 maxLuggage 0
-		*/
+*/
 
 		return rooms.getLast();
 // 		return rooms[index];
@@ -364,80 +292,14 @@ public:
 	// about it's contents (rooms, cost, guests, etc.) 
 	bool getBooking(int numGuests, int numLuggage, bool isBooking = false)
 	{
-		Guest* guest = guests.add(new Guest(guestId++, Capacity(numGuests, numLuggage)));
+//		Guest* guest = guests.add(new Guest(guestId++, Capacity(numGuests, numLuggage)));
 
-		int filledGuests = 0; 
-		int filledLuggage = 0;
-		while (filledGuests < numGuests && filledLuggage < numLuggage)
-		{
-			int maxLuggage = 0;
-			Room* fillRoom = nullptr;
-			for (int i = 0; i < rooms.size(); i++)
-			{
-				if (rooms[i]->getVacanies().luggage > maxLuggage)
-				{
-					maxLuggage = rooms[i]->getVacanies().luggage;
-					fillRoom = rooms[i];
-				}
-			}
-
-			if (numLuggage > maxLuggage)
-				fillRoom->addGuest()
-
-		}
-
-		output = String::empty;
-
-		auto JSONHelper =
-			[](juce::var& object, juce::String key, juce::var value) {
-			if (object.isObject()) {
-				object.getDynamicObject()->setProperty(key, value);
-			}
-		};
-
-		auto nestedObject = [JSONHelper](const String& id1, const juce::var val1) {
-			var newObj(new DynamicObject());
-			JSONHelper(newObj, id1, val1);
-			return newObj;
-		};
-
-//		JSONHelper(newArrayObj, "guest", Array<var>());
-
-		
 		for (int i = 0; i < rooms.size(); i++)
 		{
 			var json(rooms[i]);
-			for (int ii = 0; i < rooms[i]->getNumOccupants(); ii++)
-			{
-				DynamicObject* guests = rooms[i]->getGuest(ii);
-				rooms[i]->setProperty("guest", guests);
-			}
 			output += (JSON::toString(json));
 		}
 
-		/*
-		output = {
-  "getNumGuests": Method,
-  "getNumLuggage": Method,
-  "guests": 2,
-  "luggage": 1
-}{
-  "getNumGuests": Method,
-  "getNumLuggage": Method,
-  "guests": 2,
-  "luggage": 0
-}{
-  "getNumGuests": Method,
-  "getNumLuggage": Method,
-  "guests": 1,
-  "luggage": 2
-}{
-  "getNumGuests": Method,
-  "getNumLuggage": Method,
-  "guests": 1,
-  "luggage": 0
-}
-		*/
 
 		DBG("output = " << output);
 
