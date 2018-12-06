@@ -29,22 +29,48 @@ public:
 	
 	void handleRequest(Request &request, StreamResponse &response)
 	{
-		isBooking = String(request.getMethod()).compare(httpmethod[httpMethod::POST]) == 0;
+        response.flush();
+        bool OK = false;
+        
+		isBooking = String(request.getMethod()).compare(httpmethod[httpMethod::POST]) == 0 || String(request.get("method")).compare("post") == 0;
 		numGuests = String(request.get("guests")).getIntValue();
 		numLuggage = String(request.get("luggage")).getIntValue();
-
-		Database* db = server->getDatabase();
-
-		bool booking = db->getBooking(numGuests, numLuggage, isBooking);
-
-		if (isBooking && booking == false) // booking failed
-			response << JSON::toString(this->name << ": error: could not complete booking!");
-		else
-			response << db->getOutput();
+        
+        if (numGuests == 0)
+        {
+            response.setCode(400); // bad request
+            output = "{\"error\": \"bad request. Please provide guests=<x>&luggage=<y>\"}";
+        }
+        else
+        {
+            Database* db = server->getDatabase();
+            Guest* guest = new Guest(guestId++, Capacity(numGuests, numLuggage));
+            
+            if (OK = db->getBooking(guest))
+            {
+                response.setCode(200);
+                DynamicObject* Inn = db->getInnObject();
+                Inn->setProperty("error", "");
+                Inn->setProperty("bookingCost", db->getBookingCost(guest));
+                output = toJSON(Inn);
+                if (!isBooking)
+                    db->removeGuest(guest);
+            }
+            else
+            {
+                response.setCode(404);
+                output = "{\"error\": \"could not complete booking!\"}";
+                db->removeGuest(guest);
+            }
+        }
+        
+        DBG("output = " << output);
+        response << this->name << " = <pre>" << output << "</pre>";
 	}
 
 	int numGuests;
 	int numLuggage;
+    int guestId = 0;
 	bool isBooking;
 };
 

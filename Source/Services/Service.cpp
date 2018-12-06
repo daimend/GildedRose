@@ -22,3 +22,12 @@ Service* Service::addPrototype(String type, Service* p)
 	return p;
 }
 
+String Service::toJSON(DynamicObject* obj_)
+{
+    output = String::empty;
+    MemoryOutputStream mo (4096);
+    obj_->writeAsJSON(mo, 1, false, 3);
+    output.append(String(mo.toUTF8()), 4096);
+    mo.reset();
+    return output;
+}

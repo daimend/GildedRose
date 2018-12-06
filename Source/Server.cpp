@@ -36,7 +36,11 @@ ServerModule::~ServerModule()
 		client = nullptr;
     
     if (database)
-        database = nullptr;
+    {
+        database->clear();
+        if (database)
+            database = nullptr;
+    }
 
 	clearSingletonInstance();
  
@@ -44,7 +48,12 @@ ServerModule::~ServerModule()
 
 void ServerModule::helloWorld(Request &request, StreamResponse &response)
 {
-	response << "Welcome to Gilded Rose! " << htmlEntities(request.get("name", "... what's your name ?")) << "\n";
+	response <<
+    "Welcome to Gilded Rose! \n<br>" <<
+    "usage: \n<br>" <<
+    " query availability:   GET: http://localhost:8080/booking?guests=x&luggage=y \n<br>" <<
+    " reserve room:         POST: http://localhost:8080/booking?guests=x&luggage=y [&mehotd=post]\n<br>" <<
+    " query schedule:       GET: http://localhost:8080/schedule \n<br>" ;
 }
 
 bool ServerModule::registerService(httpMethod method_, String route_, Service* obj_) // ,std::function<void(Request &request, StreamResponse &response)> func)
@@ -58,7 +67,7 @@ bool ServerModule::registerService(ServiceHandler* service_)
 	// dd: todo: error checking, service added more than once, etc.
 	serviceHandlers.addIfNotAlreadyThere(service_);
 	serviceObjects.add(service_->service);
-	addRoute(httpmethod[service_->method], std::string(service_->route.getCharPointer()),
+	addRoute(httpmethod[service_->method], std::string(service_->route.toLowerCase().getCharPointer()),
 		ServerModule, serviceCallback);
 	return true;
 }
