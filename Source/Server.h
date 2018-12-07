@@ -28,10 +28,12 @@ struct ServiceHandler
 	String route = "/";
 };
 
-// Holds a list of Service handler callbacks
-// Callbacks/Messages can be broadcast to all services
-// or specific Service->Handlers.
-// This implementation is Thread safe via callAsync
+/** @ServiceList 
+ * Holds a list of Service handler callbacks
+ * Callbacks/Messages can be broadcast to all services
+ * or specific Service->Handlers.
+ * This implementation is Thread safe via callAsync
+ */ 
 template <class ListenerClass,
 	class ArrayType = Array<ListenerClass*>>
 	class ServiceList : virtual public ListenerList<ListenerClass, Array<ListenerClass*>>
@@ -43,9 +45,9 @@ public:
 	template <typename Callback>
 	void callAsync(ListenerClass* listenertoCall, Callback&& callback)
 	{
-        typename ArrayType::ScopedLockType lock(this->getListeners().getLock());
+		typename ArrayType::ScopedLockType lock(this->getListeners().getLock());
 
-        for (int i = 0; i < this->getListeners().size(); i++)
+		for (int i = 0; i < this->getListeners().size(); i++)
 		{
 			auto* l = this->getListeners()[i];
 
@@ -57,12 +59,12 @@ public:
 
 //==============================================================================
 /*
-    ServerModule
-    Singleton instance manages all Sever<->Service communications as Subject to
-    Notify Service Handler (Observers) of service requests.
-    All Services must register their routes and callbacks with the ServerModule.
-    The ServerModule implements the servers Controller interface to register
-    Service listeners as endpoints of the API.
+	ServerModule
+	Singleton instance manages all Sever<->Service communications as Subject to
+	Notify Service Handler (Observers) of service requests.
+	All Services must register their routes and callbacks with the ServerModule.
+	The ServerModule implements the servers Controller interface to register
+	Service listeners as endpoints of the API.
 */
 class ServerModule : public Component, public WebController //, public DeletedAtShutdown
 {
@@ -84,20 +86,20 @@ public:
 
 	Database* getDatabase() { return database.get(); };
 
-    //==============================================================================
-    /** registerService
-     * setup any default URIs / endpoints and their callbacks
-     * DD: TODO: while it might be fairly trivial to impalement
-     * Node/Express style "route/key/:value" request parsing
-     * we'll stick to standard query strings for now...
-     */
+	//==============================================================================
+	/** registerService
+	 * setup any default URIs / endpoints and their callbacks
+	 * DD: TODO: while it might be fairly trivial to impalement
+	 * Node/Express style "route/key/:value" request parsing
+	 * we'll stick to standard query strings for now...
+	 */
 	void setupRoutes();
 
 	ServiceHandler* getHandler(String method_, String route_);
 	// DD: TODO: Temporary (auto-generated) GUI for testing, disable for release
 	//==============================================================================
-    void paint (Graphics&) override;
-    void resized() override;
+	void paint (Graphics&) override;
+	void resized() override;
 
 private:
 	ServerModule();
@@ -108,5 +110,5 @@ private:
 	OwnedArray<ServiceHandler> serviceHandlers;
 	std::unique_ptr<WebViewComponent> client;
 	std::unique_ptr<Database> database;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ServerModule)
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ServerModule)
 };

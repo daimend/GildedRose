@@ -60,9 +60,9 @@ public:
 
 	// prototyping methods
 	virtual Service* clone() const = 0;
-    
-    virtual String toJSON(DynamicObject* obj);
-    
+	
+	virtual String toJSON(DynamicObject* obj);
+	
 	static Service* makeService(String type);
 	static Service* addPrototype(String type, Service* p);
 
@@ -70,7 +70,7 @@ public:
 
 	String name; // service name
 	String uri; // route / endpoint path
-    String output;
+	String output;
 };
 
 #define IMPLEMENT_CLONE(TYPE) \
@@ -78,5 +78,5 @@ public:
 
 #define MAKE_PROTOTYPE(TYPE) \
    Service* TYPE ## _myProtoype = \
-      Service::addPrototype(#TYPE, new TYPE());
+	  Service::addPrototype(#TYPE, new TYPE());
 

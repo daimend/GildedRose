@@ -15,26 +15,26 @@
 */
  struct LengthOfStay // : public DynamicObject
 {
-    // default constructor will create a default LengthOfStay for
-    // Guest:  start = now, end = 10AM following day.
-    // Gnome:  start = now (10AM), end = start + 1 hour (11AM: 1 hour after guest leaves)
-    LengthOfStay(const bool isGnome = false)
-    {
-        start = Time::getCurrentTime();
-        end = start + RelativeTime::seconds(59 - start.getSeconds()) + RelativeTime::minutes(59 - start.getMinutes());
-        if (isGnome)
-            end = end + RelativeTime::hours(1);
-        else
-            end = end + RelativeTime::hours((23 - start.getHours()) + checkout);
-    }
-    // copy
-    LengthOfStay(const LengthOfStay &other) : LengthOfStay(other.start, other.end) {}
-    // explicit
-    LengthOfStay(Time start_, Time end_) : start(start_), end(end_){}
-    ~LengthOfStay(){}
-    int checkout = 10; // 10AM
-    Time start;
-    Time end;
+	// default constructor will create a default LengthOfStay for
+	// Guest:  start = now, end = 10AM following day.
+	// Gnome:  start = now (10AM), end = start + 1 hour (11AM: 1 hour after guest leaves)
+	LengthOfStay(const bool isGnome = false)
+	{
+		start = Time::getCurrentTime();
+		end = start + RelativeTime::seconds(59 - start.getSeconds()) + RelativeTime::minutes(59 - start.getMinutes());
+		if (isGnome)
+			end = end + RelativeTime::hours(1);
+		else
+			end = end + RelativeTime::hours((23 - start.getHours()) + checkout);
+	}
+	// copy
+	LengthOfStay(const LengthOfStay &other) : LengthOfStay(other.start, other.end) {}
+	// explicit
+	LengthOfStay(Time start_, Time end_) : start(start_), end(end_){}
+	~LengthOfStay(){}
+	int checkout = 10; // 10AM
+	Time start;
+	Time end;
 };
 
 class Capacity : public DynamicObject
@@ -49,10 +49,10 @@ public:
 
 //	static Identifier getClassName() { return "Capacity"; }
 
-    const var& getProperty(const Identifier& propertyName) const
+	const var& getProperty(const Identifier& propertyName) const
 	{
-        int retval = 0;
-        String prop = propertyName.toString();
+		int retval = 0;
+		String prop = propertyName.toString();
 		if (prop.compare("luggage") == 0)
 			retval = luggage;
 		else if (prop.compare("guests") == 0)
@@ -65,8 +65,8 @@ public:
 			retval = available_luggage;
 		else if (prop.compare("available_guests") == 0)
 			retval = available_guests;
-        else
-            retval = DynamicObject::getProperty(propertyName);
+		else
+			retval = DynamicObject::getProperty(propertyName);
 		return retval;
 	}
 
@@ -93,7 +93,7 @@ public:
 		setProperty("available_guests", available_guests = max_guests - guests);
 		setProperty("available_luggage", available_luggage = max_luggage - luggage);
 	}
-    ~Capacity() 
+	~Capacity() 
 	{
 	
 	}
@@ -105,7 +105,7 @@ public:
 class CapacitySort // : public ElementComparator<Capacity*>
 {
 public:
-    CapacitySort(const String& firstAttribute, const String& secondAttribute, bool forwards = false)
+	CapacitySort(const String& firstAttribute, const String& secondAttribute, bool forwards = false)
 		: firstSortBy(firstAttribute), secondSortBy(secondAttribute),
 		direction(forwards ? 1 : -1)
 	{
@@ -114,9 +114,9 @@ public:
 	int compareElements(Capacity* first, Capacity* second)
 	{
 		int a = int(first->getProperty(firstSortBy));
-        int b = int(second->getProperty(firstSortBy));
-        int c = int(first->getProperty(secondSortBy));
-        int d = int(second->getProperty(secondSortBy));
+		int b = int(second->getProperty(firstSortBy));
+		int c = int(first->getProperty(secondSortBy));
+		int d = int(second->getProperty(secondSortBy));
 
 		if (a == b && c > d) { a = 0; b = 1; }
 		else if (a == b && c < d) {a = 1; b = 0;}
@@ -127,7 +127,7 @@ public:
 
 private:
 	String firstSortBy;
-    String secondSortBy;
+	String secondSortBy;
 	int direction;
 };
 
@@ -152,29 +152,29 @@ private:
 class Guest : public Capacity
 {
 public:
-    using Ptr = ReferenceCountedObjectPtr<Guest>;
-    
-    Guest() = default;
-    
+	using Ptr = ReferenceCountedObjectPtr<Guest>;
+	
+	Guest() = default;
+	
 	Guest(int id_, Capacity capacity_, LengthOfStay duration_ = LengthOfStay()) : Capacity(capacity_), id(id_), duration(duration_)
 	{
 		setProperty("id", id);
-        setProperty("type", "guest");
-        setProperty("checkin", duration.start.toString(true, true));
-        setProperty("checkout", duration.end.toString(true, true));
+		setProperty("type", "guest");
+		setProperty("checkin", duration.start.toString(true, true));
+		setProperty("checkout", duration.end.toString(true, true));
 	};
 	~Guest() {};
 
 	Capacity* getCapacity() { return (Capacity*)this; };
 
-    int getGuestId() { return id; }
-    
-    LengthOfStay getDuration() { return duration; }
-    
-    LengthOfStay setDuration(LengthOfStay duration_) { return duration = duration_; }
+	int getGuestId() { return id; }
+	
+	LengthOfStay getDuration() { return duration; }
+	
+	LengthOfStay setDuration(LengthOfStay duration_) { return duration = duration_; }
 
 private:
-    
+	
 	int id; // guest id
 	LengthOfStay duration; // length of stay
 };
@@ -189,35 +189,35 @@ private:
 class Gnome : public Guest
 {
 public:
-    Gnome(int id_, Capacity capacity_, LengthOfStay duration_ = LengthOfStay(true)) : Guest(id_, capacity_, duration_)
-    {
-        room = id_;
-        setProperty("id", id_);
-        setProperty("room", room);
-        setProperty("type", "gnome");
-    };
-    ~Gnome() {};
-    
-    void setStartTime(Time start_)
-    {
-        this->duration.start = start_;
-        this->duration.end = start_ + RelativeTime::seconds(59 - start_.getSeconds())
-            + RelativeTime::minutes(59 - start_.getMinutes())
-            + RelativeTime::hours(1);
-        DBG("gnome checkin = " << this->duration.start.toString(true, true));
-        setProperty("checkin", this->duration.start.toString(true, true));
-        setProperty("checkout", this->duration.end.toString(true, true));
-    }
-    
-    LengthOfStay getDuration() { return duration; }
-    
-    int getRoomId() { return room; }
-    
+	Gnome(int id_, Capacity capacity_, LengthOfStay duration_ = LengthOfStay(true)) : Guest(id_, capacity_, duration_)
+	{
+		room = id_;
+		setProperty("id", id_);
+		setProperty("room", room);
+		setProperty("type", "gnome");
+	};
+	~Gnome() {};
+	
+	void setStartTime(Time start_)
+	{
+		this->duration.start = start_;
+		this->duration.end = start_ + RelativeTime::seconds(59 - start_.getSeconds())
+			+ RelativeTime::minutes(59 - start_.getMinutes())
+			+ RelativeTime::hours(1);
+		DBG("gnome checkin = " << this->duration.start.toString(true, true));
+		setProperty("checkin", this->duration.start.toString(true, true));
+		setProperty("checkout", this->duration.end.toString(true, true));
+	}
+	
+	LengthOfStay getDuration() { return duration; }
+	
+	int getRoomId() { return room; }
+	
 
 private:
-    int id = 0;
-    int room = 0;
-    LengthOfStay duration;
+	int id = 0;
+	int room = 0;
+	LengthOfStay duration;
 };
 
 /** @Room
@@ -231,31 +231,31 @@ public:
 	Room(int roomNumber_, Capacity capacity_) : Capacity(capacity_), id(roomNumber_)
 	{
 		setProperty("id", roomNumber_);
-    };
+	};
 	~Room()
 	{
-        bookedLuggage.clear();
+		bookedLuggage.clear();
 		bookedGuests.clear();
 	}
 
 	Capacity* getCapacity() { return (Capacity*)this; };
 	int getRoomNumber() { return this->id; };
 
-    // @returns guest and luggage count for given guest
+	// @returns guest and luggage count for given guest
 	Capacity getGuestCount(Guest* guest_)
 	{
-        int numGuests = 0, numLuggage = 0;
-        for (int i=0; i < bookedGuests.size(); i++)
-        {
-            if (bookedGuests.getUnchecked(i) == guest_)
-                numGuests++;
-        }
-        for (int i=0; i < bookedLuggage.size(); i++)
-        {
-            if (bookedLuggage.getUnchecked(i) == guest_)
-                numLuggage++;
-        }
-        return Capacity(numGuests, numLuggage);
+		int numGuests = 0, numLuggage = 0;
+		for (int i=0; i < bookedGuests.size(); i++)
+		{
+			if (bookedGuests.getUnchecked(i) == guest_)
+				numGuests++;
+		}
+		for (int i=0; i < bookedLuggage.size(); i++)
+		{
+			if (bookedLuggage.getUnchecked(i) == guest_)
+				numLuggage++;
+		}
+		return Capacity(numGuests, numLuggage);
 	};
 
 	Capacity getVacanies()
@@ -264,74 +264,74 @@ public:
 			available_luggage);
 	}
 
-    /** @addGuest
-     * adds number of guests and luggage to available slots
-     * @return capacity structure with num guests and luggage added
-     */
+	/** @addGuest
+	 * adds number of guests and luggage to available slots
+	 * @return capacity structure with num guests and luggage added
+	 */
 	bool addGuest(Guest* guest_, int numGuests, int numLuggage)
 	{
 		if (numGuests > available_guests || numLuggage > available_luggage)
 			return false;
 
-        for (int i = 0; i < numLuggage; i++)
-            bookedLuggage.add(guest_);
-        
-        for (int i = 0; i < numGuests; i++)
-            bookedGuests.add(guest_);
+		for (int i = 0; i < numLuggage; i++)
+			bookedLuggage.add(guest_);
+		
+		for (int i = 0; i < numGuests; i++)
+			bookedGuests.add(guest_);
 
-        updateCapacity(bookedGuests.size(), bookedLuggage.size());
+		updateCapacity(bookedGuests.size(), bookedLuggage.size());
 
-        return true;
+		return true;
 	}
 
-    bool removeGuest(Guest* guest_)
+	bool removeGuest(Guest* guest_)
 	{
 		while (bookedGuests.contains(guest_))
 			bookedGuests.removeObject(guest_);
 
 		while (bookedLuggage.contains(guest_))
 			bookedLuggage.removeObject(guest_);
-        
-        updateCapacity(bookedGuests.size(), bookedLuggage.size());
-        
-        return true;
+		
+		updateCapacity(bookedGuests.size(), bookedLuggage.size());
+		
+		return true;
 	}
-    
-    Capacity updateCapacity(int numGuests, int numLuggage)
-    {
-        setProperty("guests", numGuests);
-        setProperty("luggage", numLuggage);
-        setProperty("cost", getRoomCost());
-        
-        return Capacity(numGuests, numLuggage);
-    }
-    
-    int getGuestCost(Guest* guest_)
-    {
-        int retval = 0;
-        Capacity cap = getGuestCount(guest_);
-        retval =  (this->roomCost / bookedGuests.size())
-            + (this->storageCost * cap.luggage);
-        return retval;
-    }
+	
+	Capacity updateCapacity(int numGuests, int numLuggage)
+	{
+		setProperty("guests", numGuests);
+		setProperty("luggage", numLuggage);
+		setProperty("cost", getRoomCost());
+		
+		return Capacity(numGuests, numLuggage);
+	}
+	
+	int getGuestCost(Guest* guest_)
+	{
+		int retval = 0;
+		Capacity cap = getGuestCount(guest_);
+		retval =  (this->roomCost / bookedGuests.size())
+			+ (this->storageCost * cap.luggage);
+		return retval;
+	}
 
 	int getRoomCost()
 	{
-        int retval = 0;
-        for (int i = 0; i < bookedGuests.size(); i++)
-            retval += getGuestCost(bookedGuests[i].get());
-        return retval;
+		int retval = 0;
+		for (int i = 0; i < bookedGuests.size(); i++)
+			retval += getGuestCost(bookedGuests[i].get());
+		return retval;
 	}
 
-    ReferenceCountedArray<Guest> getGuests()
-    {
-        return bookedGuests;
-    }
-    
-    ReferenceCountedArray<Guest> getLuggage()
-    {
-        return bookedLuggage;
-    }
+	ReferenceCountedArray<Guest> getGuests()
+	{
+		return bookedGuests;
+	}
+	
+	ReferenceCountedArray<Guest> getLuggage()
+	{
+		return bookedLuggage;
+	}
 
 private:
 	int id = 0;
@@ -339,7 +339,7 @@ private:
 	int roomCost = 10;
 	int storageCost = 2;
 	ReferenceCountedArray<Guest> bookedGuests;
-    ReferenceCountedArray<Guest> bookedLuggage;
+	ReferenceCountedArray<Guest> bookedLuggage;
 };
 
 /** @Inn
@@ -363,24 +363,24 @@ public:
 	sorterLuggage(String("available_luggage"), String("available_guests")),
 	sorterGuests(String("available_guests"), String("available_luggage"))
 	{
-        roomArray = new DynamicObject();
-        gnomeArray = new DynamicObject();
-        InnObject = new DynamicObject();
-        
-        setProperty("id", "Gilded Rose");
-        setProperty("error", "");
+		roomArray = new DynamicObject();
+		gnomeArray = new DynamicObject();
+		InnObject = new DynamicObject();
+		
+		setProperty("id", "Gilded Rose");
+		setProperty("error", "");
 	}
-    ~Inn() { /*clear();*/ };
-    
-    void clear()
-    {
-        while(occupants.size() > 0)
-            removeGuest(occupants.getLast());
+	~Inn() { /*clear();*/ };
+	
+	void clear()
+	{
+		while(occupants.size() > 0)
+			removeGuest(occupants.getLast());
 		gnomes.clear(false);
-        rooms.clear(false);
-    }
-                    
-    static Identifier getClassName() { return "Inn"; }
+		rooms.clear(false);
+	}
+					
+	static Identifier getClassName() { return "Inn"; }
 
 	/** @init
 	* Dynamically "unwraps" the "database" into
@@ -389,22 +389,22 @@ public:
 	template <size_t rows, size_t cols>
 	void init(int (&rooms_)[rows][cols])
 	{
-        // set up some DynamicObject containers
-        // to help format JSON output of our models
-        auto JSONHelper =
-        [](juce::var& object, juce::String key, juce::var value ){
-            if( object.isObject() ) {
-                object.getDynamicObject()->setProperty(key, value);
-            }
-        };
-        
-        InnObject->setProperty(getClassName(), this);
-        JSONHelper(roomArray, "array", Array<var>());
-        JSONHelper(gnomeArray, "array", Array<var>());
-        
+		// set up some DynamicObject containers
+		// to help format JSON output of our models
+		auto JSONHelper =
+		[](juce::var& object, juce::String key, juce::var value ){
+			if( object.isObject() ) {
+				object.getDynamicObject()->setProperty(key, value);
+			}
+		};
+		
+		InnObject->setProperty(getClassName(), this);
+		JSONHelper(roomArray, "array", Array<var>());
+		JSONHelper(gnomeArray, "array", Array<var>());
+		
 		for (int i = 0; i < rows; i++)
 		{
-            Capacity room_cap = Capacity(rooms_[i][0], rooms_[i][1]);
+			Capacity room_cap = Capacity(rooms_[i][0], rooms_[i][1]);
 			Room* room = addRoom(room_cap);
 			room->setProperty("guests", 0);
 			room->setProperty("luggage", 0);
@@ -413,10 +413,10 @@ public:
 			guestArray.add(new DynamicObject());
 			JSONHelper(guestArray.getReference(i), "array", Array<var>());
 
-            // for every room there is a gnome of the same capacity
-            gnomes.add(new Gnome(i, room_cap, LengthOfStay(true)));
+			// for every room there is a gnome of the same capacity
+			gnomes.add(new Gnome(i, room_cap, LengthOfStay(true)));
 		}
-        updateCapacity();
+		updateCapacity();
 	}
 
 	// more robust object factory usage implied.
@@ -426,112 +426,112 @@ public:
 		return rooms.getLast();
 	}
 
-    bool bookGuest(Guest* guest_, Room* room_, int numGuests, int numLuggage)
-    {
-        bool retval = false;
-        if (numGuests <= 0)
-            return false;
-        occupants.addIfNotAlreadyThere(guest_);
-        retval = room_->addGuest(guest_, numGuests, numLuggage);
-        if (retval && !dynamic_cast<Gnome*>(guest_))
-            gnomes[room_->getRoomNumber()]->setStartTime(guest_->getDuration().end);
-        updateCapacity();
-        return retval;
-    }
-    
-    bool removeGuest(Guest* guest_, bool delete_ = false)
-    {
-        for (int i = 0; i < rooms.size(); i++)
-            rooms[i]->removeGuest(guest_);
-        occupants.removeObject(guest_, delete_);
-        updateCapacity();
-        return true;
-    }
-    
-    bool evictGuests()
-    {
-        bool retval = false;
-        for (int i = 0; i < occupants.size(); i++)
-            if (Time::getCurrentTime() >= occupants[i]->getDuration().end)
-                retval = removeGuest(occupants[i]);
-        return retval;
-    }
-    
-    void bookGnomes()
-    {
-        for (int i = 0; i < rooms.size(); i++)
-            if (!rooms[i]->getGuests().size() && // if room is empty
-                Time::getCurrentTime().getMilliseconds()
-                - gnomes[i]->getDuration().start.getMilliseconds() <= (1000 * 60)) // and a gnome is scheduled to clean it
-                bookGuest(gnomes[i], rooms[i], gnomes[i]->guests, gnomes[i]->luggage);
-    }
-    
-    Capacity updateCapacity()
-    {
-        int numGuests = 0, numLuggage = 0;
-        for (int i = 0; i < occupants.size(); i++)
-        {
-            numGuests += occupants[i]->guests;
-            numLuggage += occupants[i]->luggage;
-        }
-        
-        setProperty("guests", numGuests);
-        setProperty("luggage", numLuggage);
-        setProperty("max_guests", max_guests);
-        setProperty("max_luggage", max_luggage);
-        setProperty("available_guests", available_guests);
-        setProperty("available_luggage", available_luggage);
-        setProperty("cost", getTotalCost());
-        
-        return Capacity(available_guests,
-                        available_luggage);
-    }
+	bool bookGuest(Guest* guest_, Room* room_, int numGuests, int numLuggage)
+	{
+		bool retval = false;
+		if (numGuests <= 0)
+			return false;
+		occupants.addIfNotAlreadyThere(guest_);
+		retval = room_->addGuest(guest_, numGuests, numLuggage);
+		if (retval && !dynamic_cast<Gnome*>(guest_))
+			gnomes[room_->getRoomNumber()]->setStartTime(guest_->getDuration().end);
+		updateCapacity();
+		return retval;
+	}
+	
+	bool removeGuest(Guest* guest_, bool delete_ = false)
+	{
+		for (int i = 0; i < rooms.size(); i++)
+			rooms[i]->removeGuest(guest_);
+		occupants.removeObject(guest_, delete_);
+		updateCapacity();
+		return true;
+	}
+	
+	bool evictGuests()
+	{
+		bool retval = false;
+		for (int i = 0; i < occupants.size(); i++)
+			if (Time::getCurrentTime() >= occupants[i]->getDuration().end)
+				retval = removeGuest(occupants[i]);
+		return retval;
+	}
+	
+	void bookGnomes()
+	{
+		for (int i = 0; i < rooms.size(); i++)
+			if (!rooms[i]->getGuests().size() && // if room is empty
+				Time::getCurrentTime().getMilliseconds()
+				- gnomes[i]->getDuration().start.getMilliseconds() <= (1000 * 60)) // and a gnome is scheduled to clean it
+				bookGuest(gnomes[i], rooms[i], gnomes[i]->guests, gnomes[i]->luggage);
+	}
+	
+	Capacity updateCapacity()
+	{
+		int numGuests = 0, numLuggage = 0;
+		for (int i = 0; i < occupants.size(); i++)
+		{
+			numGuests += occupants[i]->guests;
+			numLuggage += occupants[i]->luggage;
+		}
+		
+		setProperty("guests", numGuests);
+		setProperty("luggage", numLuggage);
+		setProperty("max_guests", max_guests);
+		setProperty("max_luggage", max_luggage);
+		setProperty("available_guests", available_guests);
+		setProperty("available_luggage", available_luggage);
+		setProperty("cost", getTotalCost());
+		
+		return Capacity(available_guests,
+						available_luggage);
+	}
 
-    int getTotalCost()
-    {
-        int retval = 0;
-        for (int i = 0; i < rooms.size(); i++)
-            retval += rooms[i]->getRoomCost();
-        return retval;
-    }
-    
-    int getBookingCost(Guest* guest_)
-    {
-        int retval = 0;
-        for (int i = 0; i < rooms.size(); i++)
-            for (int ii = 0; ii < rooms[i]->getGuestCount(guest_).guests; ii++)
-                retval += rooms[i]->getGuestCost(guest_);
-        return retval;
-    }
-    /** @getBooking
+	int getTotalCost()
+	{
+		int retval = 0;
+		for (int i = 0; i < rooms.size(); i++)
+			retval += rooms[i]->getRoomCost();
+		return retval;
+	}
+	
+	int getBookingCost(Guest* guest_)
+	{
+		int retval = 0;
+		for (int i = 0; i < rooms.size(); i++)
+			for (int ii = 0; ii < rooms[i]->getGuestCount(guest_).guests; ii++)
+				retval += rooms[i]->getGuestCost(guest_);
+		return retval;
+	}
+	/** @getBooking
 	* dd: todo: the business logic probably belongs elsewhere
 	* Possibly as function (procedure) of the db...
 	* We'll implement as function of the Inn for now as this
 	* is our pseudo db and the inn _should_ know everything
 	* about it's contents (rooms, cost, guests, etc.)
-    * To help enforce encapsulation, the model will perform
-    * the logic to check a booking, and the booking service
-    * is responsible for handling any result based logic
-    */
+	* To help enforce encapsulation, the model will perform
+	* the logic to check a booking, and the booking service
+	* is responsible for handling any result based logic
+	*/
 	bool getBooking(Guest* guest_)
 	{
-        bool retval = false;
-        Array<int> checked = { 0 };
-        int numGuests = guest_->guests;
-        int numLuggage = guest_->luggage;
-        
+		bool retval = false;
+		Array<int> checked = { 0 };
+		int numGuests = guest_->guests;
+		int numLuggage = guest_->luggage;
+		
 		rooms.sort((available_luggage > 0 && numLuggage > 0) ? sorterLuggage : sorterGuests);
 
 		if (numGuests > 0 &&
-            (numGuests <= available_guests
-             && numLuggage <= available_luggage))
+			(numGuests <= available_guests
+			 && numLuggage <= available_luggage))
 		{
 			int filledGuests = 0, filledLuggage = 0, maxLuggage = 0, maxGuests = 0;
-            
+			
 			while (filledGuests < numGuests)
 			{
 				Room* room = rooms[0];
-                
+				
 				maxLuggage = room->getVacanies().luggage;
 				maxGuests = room->getVacanies().guests;
 
@@ -544,10 +544,10 @@ public:
 				// then guests without luggage across rooms without luggage. 
 				if ((maxLuggage > waitingLuggage && maxGuests > 1))
 					maxGuests -= 1;
-                if (maxLuggage < waitingLuggage && waitingGuests >= 1 && maxGuests > 1)
-                    maxGuests -= 1;
-                if (maxLuggage < waitingLuggage && waitingGuests == 1)
-                    maxGuests = 0;
+				if (maxLuggage < waitingLuggage && waitingGuests >= 1 && maxGuests > 1)
+					maxGuests -= 1;
+				if (maxLuggage < waitingLuggage && waitingGuests == 1)
+					maxGuests = 0;
 				if (maxGuests == 1 && maxLuggage == 0 && waitingLuggage > 0)
 					maxGuests = 0;
 
@@ -558,100 +558,100 @@ public:
 				{
 					filledGuests += maxGuests;
 					filledLuggage += maxLuggage;
-                    rooms.sort((numLuggage > filledLuggage) ? sorterLuggage : sorterGuests, true);
+					rooms.sort((numLuggage > filledLuggage) ? sorterLuggage : sorterGuests, true);
 				}
-                else
+				else
 				{
-                    checked.set(rooms[0]->getRoomNumber(), 1);
-                    rooms.move(0, rooms.size()-1);
-                }
-            
-                if (available_guests < 0 || (checked.size() == rooms.size() && !checked.contains(0)))
-                {
-                    if ((filledGuests < numGuests || filledLuggage < numLuggage))
-                        retval = false;
-                    break;
-                }
-                retval = true;
+					checked.set(rooms[0]->getRoomNumber(), 1);
+					rooms.move(0, rooms.size()-1);
+				}
+			
+				if (available_guests < 0 || (checked.size() == rooms.size() && !checked.contains(0)))
+				{
+					if ((filledGuests < numGuests || filledLuggage < numLuggage))
+						retval = false;
+					break;
+				}
+				retval = true;
 			}
 		}
-        else
-            retval = false;
-        
+		else
+			retval = false;
+		
 		return retval;
 	}
-    
-    // @getInnObject
-    // @returns model objects as custom JSON objects
-    // based on request requirements...
-    DynamicObject* getInnObject(bool schedule_ = false)
-    {
-        gnomeArray.getProperty("array", var()).getArray()->clear();
-        for (int i = 0; i < rooms.size(); i++)
-        {
-            if (auto room = roomArray.getProperty("array", var()).getArray())
-            {
-                if (auto booked_guest = guestArray[i].getProperty("array", var()).getArray())
-                {
-                    booked_guest->clear();
-                    for (int ii = 0; ii < rooms[i]->getGuests().size(); ii++)
-                    {
-                        Guest* booked = rooms[i]->getGuests()[ii].get();
-                        Capacity cap = rooms[i]->getGuestCount(booked);
-                        if (cap.guests > 0)
-                        {
-                            DynamicObject* guest_obj = new DynamicObject();
-                            // if the gnomes are cleaning the room
-                            // list them and their "checkout" time
-                            if (schedule_)
-                            {
-                                guest_obj->setProperty("checkout",
-                                    booked->getDuration().end.toString(true, true));
-                                guest_obj->setProperty("type", dynamic_cast<Gnome*>(booked) ? "gnome" : "guest");
-                            }
-                            guest_obj->setProperty("id", booked->getGuestId());
-                            guest_obj->setProperty("guests", cap.guests);
-                            guest_obj->setProperty("luggage", cap.luggage);
-                            booked_guest->addIfNotAlreadyThere((DynamicObject*)guest_obj);
-                            rooms[i]->setProperty("guest", guestArray[i]);
-                        }
-                    }
-                }
-                room->addIfNotAlreadyThere((DynamicObject*)rooms[i]);
-                // list the gnome schedules
-                if (schedule_)
-                {
-                    if (auto scheduled_gnomes = gnomeArray.getProperty("array", var()).getArray())
-                    {
-                        if (rooms[i]->getGuests().size() && !dynamic_cast<Gnome*>(rooms[i]->getGuests()[0].get()))
-                        {
-                            DynamicObject* gnome_obj = new DynamicObject();
-                            gnome_obj->setProperty("id", gnomes[i]->getGuestId());
-                            gnome_obj->setProperty("checkin", gnomes[i]->getDuration().start.toString(true, true));
-                            gnome_obj->setProperty("room", gnomes[i]->getRoomId());
-                            scheduled_gnomes->addIfNotAlreadyThere((DynamicObject*)gnome_obj);
-                        }
-                    }
-                    
-                }
-            }
-        }
-        InnObject->getProperty("Inn").getDynamicObject()->setProperty("rooms", roomArray);
-        if (schedule_)
-            InnObject->getProperty("Inn").getDynamicObject()->setProperty("gnomes", gnomeArray);
-            
-        return InnObject.get();
-    }
+	
+	// @getInnObject
+	// @returns model objects as custom JSON objects
+	// based on request requirements...
+	DynamicObject* getInnObject(bool schedule_ = false)
+	{
+		gnomeArray.getProperty("array", var()).getArray()->clear();
+		for (int i = 0; i < rooms.size(); i++)
+		{
+			if (auto room = roomArray.getProperty("array", var()).getArray())
+			{
+				if (auto booked_guest = guestArray[i].getProperty("array", var()).getArray())
+				{
+					booked_guest->clear();
+					for (int ii = 0; ii < rooms[i]->getGuests().size(); ii++)
+					{
+						Guest* booked = rooms[i]->getGuests()[ii].get();
+						Capacity cap = rooms[i]->getGuestCount(booked);
+						if (cap.guests > 0)
+						{
+							DynamicObject* guest_obj = new DynamicObject();
+							// if the gnomes are cleaning the room
+							// list them and their "checkout" time
+							if (schedule_)
+							{
+								guest_obj->setProperty("checkout",
+									booked->getDuration().end.toString(true, true));
+								guest_obj->setProperty("type", dynamic_cast<Gnome*>(booked) ? "gnome" : "guest");
+							}
+							guest_obj->setProperty("id", booked->getGuestId());
+							guest_obj->setProperty("guests", cap.guests);
+							guest_obj->setProperty("luggage", cap.luggage);
+							booked_guest->addIfNotAlreadyThere((DynamicObject*)guest_obj);
+							rooms[i]->setProperty("guest", guestArray[i]);
+						}
+					}
+				}
+				room->addIfNotAlreadyThere((DynamicObject*)rooms[i]);
+				// list the gnome schedules
+				if (schedule_)
+				{
+					if (auto scheduled_gnomes = gnomeArray.getProperty("array", var()).getArray())
+					{
+						if (rooms[i]->getGuests().size() && !dynamic_cast<Gnome*>(rooms[i]->getGuests()[0].get()))
+						{
+							DynamicObject* gnome_obj = new DynamicObject();
+							gnome_obj->setProperty("id", gnomes[i]->getGuestId());
+							gnome_obj->setProperty("checkin", gnomes[i]->getDuration().start.toString(true, true));
+							gnome_obj->setProperty("room", gnomes[i]->getRoomId());
+							scheduled_gnomes->addIfNotAlreadyThere((DynamicObject*)gnome_obj);
+						}
+					}
+					
+				}
+			}
+		}
+		InnObject->getProperty("Inn").getDynamicObject()->setProperty("rooms", roomArray);
+		if (schedule_)
+			InnObject->getProperty("Inn").getDynamicObject()->setProperty("gnomes", gnomeArray);
+			
+		return InnObject.get();
+	}
 
-    int roomId = 0, guestId = 0;
+	int roomId = 0, guestId = 0;
 	String name;
 	OwnedArray<Guest> occupants;
-    OwnedArray<Gnome> gnomes;
+	OwnedArray<Gnome> gnomes;
 	OwnedArray<Room> rooms;
-    DynamicObject::Ptr InnObject;
-    Array<var> guestArray;
-    var roomArray;
-    var gnomeArray;
+	DynamicObject::Ptr InnObject;
+	Array<var> guestArray;
+	var roomArray;
+	var gnomeArray;
 
 	CapacitySort sorterLuggage;
 	CapacitySort sorterGuests;

@@ -27,20 +27,20 @@ ServerModule::ServerModule()
 
 	client.reset(new WebViewComponent());
 	addAndMakeVisible(client.get());
-    setSize (600, 400);
+	setSize (600, 400);
 }
 
 ServerModule::~ServerModule()
 {
 	if (client)
 		client = nullptr;
-    
-    if (database)
-    {
-        database->clear();
-        if (database)
-            database = nullptr;
-    }
+	
+	if (database)
+	{
+		database->clear();
+		if (database)
+			database = nullptr;
+	}
 
 	clearSingletonInstance();
  
@@ -49,11 +49,11 @@ ServerModule::~ServerModule()
 void ServerModule::helloWorld(Request &request, StreamResponse &response)
 {
 	response <<
-    "Welcome to Gilded Rose! \n<br>" <<
-    "usage: \n<br>" <<
-    " query availability:   GET: http://localhost:8080/booking?guests=x&luggage=y \n<br>" <<
-    " reserve room:         POST: http://localhost:8080/booking?guests=x&luggage=y [&mehotd=post]\n<br>" <<
-    " query schedule:       GET: http://localhost:8080/schedule \n<br>" ;
+	"Welcome to Gilded Rose! \n<br>" <<
+	"usage: \n<br>" <<
+	" query availability:   GET: http://localhost:8080/booking?guests=x&luggage=y \n<br>" <<
+	" reserve room:         POST: http://localhost:8080/booking?guests=x&luggage=y [&mehotd=post]\n<br>" <<
+	" query schedule:       GET: http://localhost:8080/schedule \n<br>" ;
 }
 
 bool ServerModule::registerService(httpMethod method_, String route_, Service* obj_) // ,std::function<void(Request &request, StreamResponse &response)> func)
@@ -105,8 +105,8 @@ ServiceHandler* ServerModule::getHandler(String method_, String route_)
 //==============================================================================
 void ServerModule::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+	// (Our component is opaque, so we must completely fill the background with a solid colour)
+	g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 }
 
 void ServerModule::resized()
