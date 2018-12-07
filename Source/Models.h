@@ -28,17 +28,10 @@
             end = end + RelativeTime::hours((23 - start.getHours()) + checkout);
     }
     // copy
-    LengthOfStay(const LengthOfStay &other) : LengthOfStay(other.start, other.end)
-    {
-    }
+    LengthOfStay(const LengthOfStay &other) : LengthOfStay(other.start, other.end) {}
     // explicit
-    LengthOfStay(Time start_, Time end_) : start(start_), end(end_)
-    {
-    }
-    ~LengthOfStay()
-    {
-        
-    }
+    LengthOfStay(Time start_, Time end_) : start(start_), end(end_){}
+    ~LengthOfStay(){}
     int checkout = 10; // 10AM
     Time start;
     Time end;
@@ -109,30 +102,26 @@ public:
 //==============================================================================
 // A comparator used to sort our guests/luggage, takes optional second argument
 // as vector for priority sort on both attributes (see std::vector and std::priority_queue)
-class CapacitySort
+class CapacitySort // : public ElementComparator<Capacity*>
 {
 public:
-    CapacitySort(const String& firstAttribute, const String& secondAttribute = String::empty, bool forwards = true)
+    CapacitySort(const String& firstAttribute, const String& secondAttribute, bool forwards = false)
 		: firstSortBy(firstAttribute), secondSortBy(secondAttribute),
 		direction(forwards ? 1 : -1)
 	{
 	}
 
-	int compareElements(Capacity* first, Capacity* second) const
+	int compareElements(Capacity* first, Capacity* second)
 	{
 		int a = int(first->getProperty(firstSortBy));
         int b = int(second->getProperty(firstSortBy));
-        int c = 0;
-        int d = 0;
-        
-        if (secondSortBy.isNotEmpty())
-        {
-            c = int(first->getProperty(secondSortBy));
-            d = int(second->getProperty(secondSortBy));
-        }
-        
-        bool e = (a < b), f = (a > b), g = (c <= d), h = (c >= d), i = (a == 0), j = (b == 0), k = (i && j);
-        int result = ((e && g) || (j && !k)) ? -1 : ((f & h) || (i && !k)) ? 1 : 0;
+        int c = int(first->getProperty(secondSortBy));
+        int d = int(second->getProperty(secondSortBy));
+
+		if (a == b && c > d) { a = 0; b = 1; }
+		else if (a == b && c < d) {a = 1; b = 0;}
+
+		int result = (a < b) ? -1 : (a > b) ? 1 : 0;
 		return direction * (int)result;
 	}
 
@@ -234,7 +223,7 @@ private:
 /** @Room
  *  Room objects inherit from Capacity
  *  which keeps track of the number of room
- *  occupants and vanacies.
+ *  occupants and vacancies.
  */
 class Room : public Capacity
 {
@@ -370,9 +359,9 @@ private:
 class Inn : public Capacity
 {
 public:
-	Inn(String name_) : Capacity(0,0), name(name_),
-    sorterLuggage(String("available_luggage"), String("available_guests")),
-    sorterGuests(String("available_guests"), String("available_luggage"))
+	Inn(String name_) : Capacity(0, 0), name(name_), 
+	sorterLuggage(String("available_luggage"), String("available_guests")),
+	sorterGuests(String("available_guests"), String("available_luggage"))
 	{
         roomArray = new DynamicObject();
         gnomeArray = new DynamicObject();
@@ -387,13 +376,16 @@ public:
     {
         while(occupants.size() > 0)
             removeGuest(occupants.getLast());
+		gnomes.clear(false);
         rooms.clear(false);
     }
                     
     static Identifier getClassName() { return "Inn"; }
 
-	// DD: TODO: Initializing the Inn may also create/start
-	// the Inns Calendar tread for real time simulation.
+	/** @init
+	* Dynamically "unwraps" the "database" into
+	* "jsonified" model object structures
+	*/
 	template <size_t rows, size_t cols>
 	void init(int (&rooms_)[rows][cols])
 	{
@@ -418,10 +410,11 @@ public:
 			room->setProperty("luggage", 0);
 			max_guests = available_guests += room->available_guests;
 			max_luggage = available_luggage += room->available_luggage;
-            // for every room there is a gnome of the same capacuty
+			guestArray.add(new DynamicObject());
+			JSONHelper(guestArray.getReference(i), "array", Array<var>());
+
+            // for every room there is a gnome of the same capacity
             gnomes.add(new Gnome(i, room_cap, LengthOfStay(true)));
-            guestArray.add(new DynamicObject());
-            JSONHelper(guestArray.getReference(i), "array", Array<var>());
 		}
         updateCapacity();
 	}
@@ -527,8 +520,7 @@ public:
         int numGuests = guest_->guests;
         int numLuggage = guest_->luggage;
         
-        CapacitySort sorter = (available_luggage > 0 && numLuggage > 0) ? sorterLuggage : sorterGuests;
-        rooms.sort(sorter);
+		rooms.sort((available_luggage > 0 && numLuggage > 0) ? sorterLuggage : sorterGuests);
 
 		if (numGuests > 0 &&
             (numGuests <= available_guests
@@ -543,24 +535,33 @@ public:
 				maxLuggage = room->getVacanies().luggage;
 				maxGuests = room->getVacanies().guests;
 
-				if ((maxLuggage > numLuggage && maxGuests > 1))
-					maxGuests -= 1;
-                if (maxLuggage < numLuggage && ((numGuests - filledGuests) >= 1) && maxGuests > 1)
-                    maxGuests -= 1;
-                if (maxLuggage < numLuggage && numGuests == 1)
-                    maxGuests = 0;
+				int waitingGuests = numGuests - filledGuests;
+				int waitingLuggage = numLuggage - filledLuggage;
 
-				maxGuests = jmin(numGuests - filledGuests, maxGuests);
-                maxLuggage = jmin(numLuggage - filledLuggage, maxLuggage);
+				// Some tweaks to spread guests across multiple rooms (shared inn)
+				// to help maximize profitability
+				// Priority sort will favor guests with luggage first, 
+				// then guests without luggage across rooms without luggage. 
+				if ((maxLuggage > waitingLuggage && maxGuests > 1))
+					maxGuests -= 1;
+                if (maxLuggage < waitingLuggage && waitingGuests >= 1 && maxGuests > 1)
+                    maxGuests -= 1;
+                if (maxLuggage < waitingLuggage && waitingGuests == 1)
+                    maxGuests = 0;
+				if (maxGuests == 1 && maxLuggage == 0 && waitingLuggage > 0)
+					maxGuests = 0;
+
+				maxGuests = jmin(waitingGuests, maxGuests);
+				maxLuggage = jmin(waitingLuggage, maxLuggage);
 
 				if (bookGuest(guest_, room, maxGuests, maxLuggage))
 				{
 					filledGuests += maxGuests;
 					filledLuggage += maxLuggage;
-                    rooms.sort(sorter);
+                    rooms.sort((numLuggage > filledLuggage) ? sorterLuggage : sorterGuests, true);
 				}
                 else
-                {
+				{
                     checked.set(rooms[0]->getRoomNumber(), 1);
                     rooms.move(0, rooms.size()-1);
                 }
@@ -651,8 +652,8 @@ public:
     Array<var> guestArray;
     var roomArray;
     var gnomeArray;
-    
-    CapacitySort sorterLuggage;
-    CapacitySort sorterGuests;
+
+	CapacitySort sorterLuggage;
+	CapacitySort sorterGuests;
 };
 

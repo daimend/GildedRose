@@ -30,7 +30,6 @@ public:
         Database* db = server->getDatabase();
         while(!threadShouldExit())
         {
-            DBG("Scheduling Thread");
             start = Time::getCurrentTime();
             if (db->evictGuests())
                 db->bookGnomes();

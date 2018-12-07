@@ -27,7 +27,7 @@
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="D:/Code/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="D:/Code/JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../../../Source/JUCE/modules"/>
         <MODULEPATH id="juce_data_structures" path="D:/Code/JUCE/modules"/>
         <MODULEPATH id="juce_events" path="D:/Code/JUCE/modules"/>
         <MODULEPATH id="juce_graphics" path="D:/Code/JUCE/modules"/>

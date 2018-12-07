@@ -19,7 +19,7 @@ Examples:
 1) GET:  check availability for 3 guests with 3 luggage
 
 http://localhost:8080/booking?guests=3&luggage=3
-
+```
 Booking =
 {
    "Inn": {
@@ -101,11 +101,11 @@ Booking =
    "error": "",
    "bookingCost": 28
  }
-
+```
 2) POST:  book 3 guests with 3 luggage
 
 http://localhost:8080/booking?guests=3&luggage=3&method=post
-
+```
 Booking =
 {
    "Inn": {
@@ -189,11 +189,11 @@ Booking =
    "error": "",
    "bookingCost": 28
  }
-
+```
 3) GET:  check the schedule. Note the gnomes are scheduled to clean the rooms at the same time the guests are scheduled to check out.
 
 http://localhost:8080/schedule
-
+```
 Schedule =
 {
    "Inn": {
@@ -336,11 +336,11 @@ Schedule =
    "error": "",
    "bookingCost": 20
  }
-
+```
 4) GET:  check the schedule. The scheduling thread has evicted the guests upon their checkout time and the room are now occupied (for one hour) by the gnomes.  Booking these rooms while occupied by gnomes will not succeed until the gnome are done cleaning.
 
 http://localhost:8080/schedule
-
+```
 Schedule =
 {
    "Inn": {
@@ -440,11 +440,10 @@ Schedule =
    "error": "",
    "bookingCost": 20
  }
-
+```
 ●    At a high level, how does your system work? 
 
-The app provides a self contained, multi-threaded, full stack environment to test API (client->API/middleware->server) minus a full featured database.  
-Simple array based objects are used to define the data strucures and logic which might otherwise be handled by the backend->db layers.
+The app provides a self contained, multi-threaded, full stack environment to test API (client->API/middleware->server) minus a full featured database.  Simple array based objects are used to define the data strucures and logic which might otherwise be handled by the backend->db layers.
 
 * A Singleton ServerModule controller is implemented to forward client requests/response to/from the webserver, 
     manage service callbacks (observer pattern), and provide an interface to the database Models.
@@ -457,8 +456,8 @@ Simple array based objects are used to define the data strucures and logic which
 
 ●    How would we extend your system if we had to add more rooms, more business logic constraints, more cleaning gnomes requirements?
 
-The Models contain all of the object structures, parameters and the related logic.  
-In this case only the Models (and/or underlying database in a real world system) would need to be modified or extended.
+The Models contain all of the object structures, parameters and the related logic.  In this case only the Models (and/or underlying database in a real world system) would need to be modified or extended.
+For the most part the Models are well encapsulated and extensible.  Adding more rooms would simply involve changing the value of a global define, and any additional logic or constraints would likely be isolated to one or two methods which handle the core logic.
 
 ●    What documentation, websites, papers, etc. did you consult for this assignment?
 
@@ -485,11 +484,12 @@ This allows greater flexibility based on the project requirements and/or develop
 Due to some scheduling conflicts, I worked on this during a couple sessions for a total of about four or five hours.
 
 1) Optimize business logic which handles the booking / scheduling.
-2) Code cleanup, leak detection, and Error Checking:  Functional error cecking, implement try/catch blocks, critical sections, etc.
-3) Add some layer of security and session handling; even if this was simple user:password to start, then adding layerd authentication model for different user levels.  Also adding encrytion / encoding to the communication transport.
-4) I chose to ensure the services were threadable so that the Shceduling / Calender could ultimately be made "live".  In this way, the system could also automate certain tasks such as sending push notifications to the gnomes when it was time to clean room[x], to guests when their checkout time was near, etc.  And for the Innkeeper, obviously, admin level services to show occupancy and profitability over time, etc.
-5) Setup a real-world database and server for the API
-6) Implement unit testing and profiling (performance testing) for all layer of the stack; middleware/API, backend and clients. 
+2) Better documentation, use of auto-documentation tools such as Doxygen.
+3) Code cleanup, and error checking:  Functional error cecking, implement try/catch blocks, critical sections, etc.
+4) Add some layer of security and session handling; even if this was simple user:password to start, then adding layerd authentication model for different user levels.  Also adding encrytion / encoding to the communication transport.
+5) I chose to ensure the services were threadable so that the Shceduling / Calender could ultimately be made "live".  In this way, the system could also automate certain tasks such as sending push notifications to the gnomes when it was time to clean room[x], to guests when their checkout time was near, etc.  And for the Innkeeper, obviously, admin level services to show occupancy and profitability over time, etc.
+6) Setup a real-world database and server for the API
+7) Implement unit testing and profiling (performance testing) for all layer of the stack; middleware/API, backend and clients. 
 
 ●    If you were going to implement a level of automated testing to prepare this for a production environment, how would you go about doing so?
 

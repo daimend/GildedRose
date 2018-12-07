@@ -32,13 +32,14 @@ public:
         response.flush();
         bool OK = false;
         
-		isBooking = String(request.getMethod()).compare(httpmethod[httpMethod::POST]) == 0 || String(request.get("method")).compare("post") == 0;
+		isBooking = String(request.getMethod()).compare(httpmethod[httpMethod::POST]) == 0 
+			|| String(request.get("method")).compare("post") == 0;
 		numGuests = String(request.get("guests")).getIntValue();
 		numLuggage = String(request.get("luggage")).getIntValue();
         
         if (numGuests == 0)
         {
-            response.setCode(400); // bad request
+//            response.setCode(400); // bad request
             output = "{\"error\": \"bad request. Please provide guests=<x>&luggage=<y>\"}";
         }
         else
@@ -50,7 +51,6 @@ public:
             {
                 response.setCode(200);
                 DynamicObject* Inn = db->getInnObject();
-                Inn->setProperty("error", "");
                 Inn->setProperty("bookingCost", db->getBookingCost(guest));
                 output = toJSON(Inn);
                 if (!isBooking)
@@ -58,7 +58,7 @@ public:
             }
             else
             {
-                response.setCode(404);
+//                response.setCode(404);
                 output = "{\"error\": \"could not complete booking!\"}";
                 db->removeGuest(guest);
             }
